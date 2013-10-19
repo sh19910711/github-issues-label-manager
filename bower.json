@@ -1,0 +1,27 @@
+{
+  "name": "github-issues-label-manager",
+  "version": "0.0.0",
+  "authors": [
+    "Hiroyuki Sano <sh19910711@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.0"
+  },
+  "exportsOverride": {
+    "bootstrap": {
+      "js": ["dist/js/bootstrap.js"],
+      "css": ["dist/css/bootstrap.css"]
+    },
+    "jquery": {
+      "js": "jquery.js"
+    }
+  }
+}

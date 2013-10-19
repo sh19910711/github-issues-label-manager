@@ -1,3 +1,4 @@
+%h1 GitHub Issues Label Manager
 %form{:action => "/github/auth/login", :method => "post"}
   = get_csrf_tag
-  %input{:type => "submit", :value => "GitHubアカウントでログイン"}
+  %input.btn.btn-primary{:type => "submit", :value => "GitHubアカウントでログイン"}

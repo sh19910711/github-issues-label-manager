@@ -3,5 +3,9 @@
   %head
     %meta{:charset => "UTF-8"}
     %title GitHub Issues Label Manager
+    %link{:rel => "stylesheet", :href => "lib/bootstrap/css/bootstrap.css"}
+    %script{:src => "lib/jquery/js/jquery.js"}
+    %script{:src => "lib/bootstrap/js/bootstrap.js"}
   %body
-    = yield
+    %div.container
+      = yield

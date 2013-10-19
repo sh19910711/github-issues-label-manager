@@ -5,6 +5,9 @@ group :production, :development do
   gem "sinatra"
   gem "sinatra-contrib"
   gem "haml"
+
+  gem "oauth2"
+  gem "addressable"
 end
 
 group :development do

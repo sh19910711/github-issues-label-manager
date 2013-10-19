@@ -39,7 +39,7 @@ module Server
     end
 
     get "/version" do
-      "0.0.0"
+      "0.0.1"
     end
 
     post "/logout" do

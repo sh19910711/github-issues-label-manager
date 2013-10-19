@@ -38,6 +38,10 @@ module Server
       end
     end
 
+    get "/version" do
+      "0.0.0"
+    end
+
     post "/logout" do
       session.clear
       redirect "/logout/ok"

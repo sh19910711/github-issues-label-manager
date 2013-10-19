@@ -1,2 +1,3 @@
 %form{:action => "/github/auth/login", :method => "post"}
+  = get_csrf_tag
   %input{:type => "submit", :value => "GitHubアカウントでログイン"}

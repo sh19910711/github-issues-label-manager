@@ -2,6 +2,7 @@ require "server/config"
 require "sinatra/base"
 require "sinatra/ext/session"
 require "sinatra/ext/github"
+require "sinatra/ext/csrf"
 
 module Server
   class App < Sinatra::Base
@@ -10,6 +11,7 @@ module Server
       :secret   => SESSION_SECRET,
     }
     register Sinatra::Extension::Session
+    register Sinatra::Extension::Csrf
 
     set :github_settings, {
       :client_id              => GITHUB_CLIENT_ID,

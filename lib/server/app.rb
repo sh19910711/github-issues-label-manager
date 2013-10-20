@@ -1,4 +1,6 @@
 require "server/config"
+require "server/common"
+require "server/models"
 require "sinatra/base"
 require "sinatra/ext/session"
 require "sinatra/ext/github"
@@ -6,6 +8,7 @@ require "sinatra/ext/csrf"
 
 module Server
   class App < Sinatra::Base
+    include Server::Models
     set :session_settings, {
       :key      => SESSION_KEY,
       :secret   => SESSION_SECRET,
@@ -17,10 +20,22 @@ module Server
       :client_id              => GITHUB_CLIENT_ID,
       :client_secret          => GITHUB_CLIENT_SECRET,
       :success_callback_url   => "/",
-      :success_callback_func  => Proc.new do |access_token|
+      :success_callback_func  => Proc.new do
+        github = Server::Common::GitHub.new session[:github_access_token]
+        github_user_id = github.get_user_id
+        selected = User.where(:github_user_id => github_user_id).cache
+        session[:first_login] = selected.count == 0
+        user = User.find_or_create_by(
+          :github_user_id => github_user_id,
+        )
+        user.update(
+          :github_user_id => github_user_id,
+          :github_access_token => session[:github_access_token],
+        )
         # set login session
         session[:login] = {
           :ip => request.ip,
+          :github_user_id => github_user_id,
         }
       end
     }
@@ -32,6 +47,7 @@ module Server
 
     get "/" do
       if is_login?
+        puts "this is first login" if session[:first_login]
         haml :home
       else
         haml :index

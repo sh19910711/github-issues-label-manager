@@ -13,15 +13,35 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.0.0"
+    "bootstrap": "~3.0.0",
+    "jquery-pjax": "~1.7.3",
+    "requirejs": "~2.1.9",
+    "backbone": "~1.1.0",
+    "underscore": "~1.5.2"
   },
   "exportsOverride": {
     "bootstrap": {
-      "js": ["dist/js/bootstrap.js"],
-      "css": ["dist/css/bootstrap.css"]
+      "js": [
+        "dist/js/bootstrap.js"
+      ],
+      "css": [
+        "dist/css/bootstrap.css"
+      ]
     },
     "jquery": {
       "js": "jquery.js"
+    },
+    "jquery-pjax": {
+      "js": "jquery.pjax.js"
+    },
+    "requirejs": {
+      "js": "require.js"
+    },
+    "backbone": {
+      "js": "backbone-min.js"
+    },
+    "underscore": {
+      "js": "underscore.js"
     }
   }
 }

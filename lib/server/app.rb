@@ -2,9 +2,12 @@ require "server/config"
 require "server/common"
 require "server/models"
 require "sinatra/base"
+
+# Sinatra::Extensions
 require "sinatra/ext/session"
 require "sinatra/ext/github"
 require "sinatra/ext/csrf"
+require "sinatra/ext/pjax"
 
 module Server
   class App < Sinatra::Base
@@ -15,6 +18,7 @@ module Server
     }
     register Sinatra::Extension::Session
     register Sinatra::Extension::Csrf
+    register Sinatra::Extension::Pjax
 
     set :github_settings, {
       :client_id              => GITHUB_CLIENT_ID,
@@ -23,6 +27,7 @@ module Server
       :success_callback_func  => Proc.new do
         github = Server::Common::GitHub.new session[:github_access_token]
         github_user_id = github.get_user_id
+        # set github user info
         selected = User.where(:github_user_id => github_user_id).cache
         session[:first_login] = selected.count == 0
         user = User.find_or_create_by(
@@ -48,10 +53,14 @@ module Server
     get "/" do
       if is_login?
         puts "this is first login" if session[:first_login]
-        haml :home
+        haml_pjax :home
       else
-        haml :index
+        haml_pjax :index
       end
+    end
+
+    get "/about" do
+      haml_pjax :about
     end
 
     get "/version" do
@@ -71,6 +80,9 @@ module Server
       def is_login?
         defined?(session[:login][:ip]) &&
           session[:login][:ip] == request.ip
+      end
+      def partial view
+        haml view
       end
     end
   end

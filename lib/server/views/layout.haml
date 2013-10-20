@@ -2,11 +2,19 @@
 %html
   %head
     %meta{:charset => "UTF-8"}
+    %meta{"data-csrf-token" => get_csrf_token}
     %title GitHub Issues Label Manager
-    %link{:rel => "stylesheet", :href => "lib/bootstrap/css/bootstrap.css"}
-    %script{:src => "lib/jquery/js/jquery.js"}
-    %script{:src => "lib/bootstrap/js/bootstrap.js"}
+    %link{:rel => "stylesheet", :href => "lib/com/bootstrap/css/bootstrap.css"}
+    %script{:src => "lib/com/requirejs/js/require.js", "data-main" => "lib/app/js/main"}
   %body
-    %div.container
-      %h1 GitHub Issues Label Manager
-      = yield
+    %div#wrapper.container
+      %div#header.container
+        %h1 GitHub Issues Label Manager
+      %div#contents.row
+        %div#side.col-xs-4
+          - if is_login?
+            = partial :side_login
+          - else
+            = partial :side_logout
+        %div#container.container.col-xs-8
+          = yield

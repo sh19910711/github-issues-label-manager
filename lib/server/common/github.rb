@@ -14,7 +14,13 @@ module Server
       end
 
       def get_repos
-        @client.user[:repos]
+        @client.user.rels[:repos].get.data.map {|repo|
+          {
+            :full_name => repo.full_name,
+            :name => repo.name,
+            :id => repo.id,
+          }
+        }
       end
     end
   end

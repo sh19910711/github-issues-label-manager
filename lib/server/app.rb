@@ -33,7 +33,7 @@ module Server
         user = User.find_or_create_by(
           :github_user_id => github_user_id,
         )
-        user.update(
+        user.update_attributes(
           :github_user_id => github_user_id,
           :github_access_token => session[:github_access_token],
         )
@@ -68,6 +68,17 @@ module Server
       end
     end
 
+    post "/api/get_new_repos" do
+      require_login do
+        github = Server::Common::GitHub.new login_user.github_access_token
+        repos_json = github.get_repos.to_json
+        login_user.update_attributes(
+          :github_repos_json => repos_json,
+        )
+        repos_json
+      end
+    end
+
     get "/repos" do
       haml_pjax :user_repos
     end
@@ -81,6 +92,11 @@ module Server
       def is_login?
         defined?(session[:login][:ip]) &&
           session[:login][:ip] == request.ip
+      end
+
+      def login_user
+        halt 403 unless is_login?
+        User.where(:github_user_id => session[:login][:github_user_id]).cache.first
       end
 
       def partial view

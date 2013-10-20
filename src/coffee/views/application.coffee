@@ -5,11 +5,7 @@ define(
   ]
   (Backbone, _)->
     class ApplicationView extends Backbone.View
-      el: "#container"
-      events:
-        "click button#update_user_repos": "update_user_repos"
-      update_user_repos: ()->
-        console.log "@ApplicationView#update_user_repos"
+      el: "#application-view"
       initialize: ->
         _.bindAll this, "render"
       render: ->

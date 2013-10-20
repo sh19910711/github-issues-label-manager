@@ -12,6 +12,17 @@
         return window;
       };
 
+      Utils.request_api = function(path) {
+        return $.ajax({
+          url: "/api/" + path,
+          type: "POST",
+          dataType: "json",
+          data: {
+            csrf_token: this.get_csrf_token()
+          }
+        });
+      };
+
       return Utils;
 
     })();

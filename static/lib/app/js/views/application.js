@@ -12,15 +12,7 @@
         return _ref;
       }
 
-      ApplicationView.prototype.el = "#container";
-
-      ApplicationView.prototype.events = {
-        "click button#update_user_repos": "update_user_repos"
-      };
-
-      ApplicationView.prototype.update_user_repos = function() {
-        return console.log("@ApplicationView#update_user_repos");
-      };
+      ApplicationView.prototype.el = "#application-view";
 
       ApplicationView.prototype.initialize = function() {
         return _.bindAll(this, "render");

@@ -1,10 +1,9 @@
 (function() {
-  define(["app/application/router", "app/views/application"], function(Router, View) {
+  define(["app/application/router", "app/views/application"], function(Router, ApplicationView) {
     var Application;
     return Application = (function() {
       function Application(options) {
-        this.view = new View();
-        $("#contents").append(this.view.render().el);
+        this.view = new ApplicationView();
         this.router = new Router(options);
         Backbone.history.start({
           pushState: true

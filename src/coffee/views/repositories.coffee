@@ -1,9 +1,16 @@
 define(
   [
     "com/backbone/backbone"
+    "com/underscore/underscore"
+    "app/collections/repositories"
   ]
-  (Backbone)->
-    class RepositoriesView extends Backbone.Colleciton
-      initialize: ()->
-        console.log "@View::RepositoriesView#initialize"
+  (Backbone, _, Repositories)->
+    class RepositoriesView extends Backbone.View
+      tagName: "table"
+      initialize: (options)->
+        _.bindAll this, "render"
+      render: ()->
+        @collection.each (repo)->
+          console.log "repo = ", repo
+        @
 )

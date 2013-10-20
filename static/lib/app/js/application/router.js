@@ -17,7 +17,7 @@
         this.container_id = options.container_id;
         this.side_id = options.side_id;
         self = this;
-        return $(this.side_id).on('click', 'a.pjaxable', function() {
+        return $(document).on('click', 'a.pjaxable', function() {
           self.navigate($(this).attr('href'), true);
           return false;
         });
@@ -25,7 +25,9 @@
 
       Router.prototype.routes = {
         "": "show_index",
-        "about": "show_about"
+        "about": "show_about",
+        "version": "show_version",
+        "repos": "show_repos"
       };
 
       Router.prototype.show_index = function() {
@@ -34,6 +36,14 @@
 
       Router.prototype.show_about = function() {
         return this.load_contents("/about");
+      };
+
+      Router.prototype.show_version = function() {
+        return this.load_contents("/version");
+      };
+
+      Router.prototype.show_repos = function() {
+        return this.load_contents("/repos");
       };
 
       Router.prototype.load_contents = function(path) {

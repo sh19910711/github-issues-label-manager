@@ -12,6 +12,10 @@ module Server
       def get_user_id
         @client.user.login
       end
+
+      def get_repos
+        @client.user[:repos]
+      end
     end
   end
 end

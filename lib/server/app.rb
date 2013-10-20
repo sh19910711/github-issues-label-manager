@@ -52,28 +52,29 @@ module Server
 
     get "/" do
       if is_login?
-        puts "this is first login" if session[:first_login]
-        haml_pjax :home
+        haml_pjax :user_home
       else
         haml_pjax :index
       end
     end
 
     get "/about" do
-      haml_pjax :about
+      haml_pjax :about_app
     end
 
     get "/version" do
-      "0.0.1"
+      require_login do
+        haml_pjax :version
+      end
+    end
+
+    get "/repos" do
+      haml_pjax :user_repos
     end
 
     post "/logout" do
       session.clear
-      redirect "/logout/ok"
-    end
-
-    get "/logout/ok" do
-      "ログアウトしました"
+      redirect "/"
     end
 
     helpers do
@@ -81,8 +82,14 @@ module Server
         defined?(session[:login][:ip]) &&
           session[:login][:ip] == request.ip
       end
+
       def partial view
         haml view
+      end
+
+      def require_login &block
+        redirect "/" unless is_login?
+        yield
       end
     end
   end

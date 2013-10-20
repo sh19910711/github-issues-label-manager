@@ -6,6 +6,10 @@ define(
       paths:
         "app/application/router": "/lib/app/js/application/router"
         "app/application": "/lib/app/js/application"
+        "app/views/application": "/lib/app/js/views/application"
+        "app/views/repositories": "/lib/app/js/views/repositories"
+        "app/models/repository": "/lib/app/js/models/repository"
+        "app/models/repositories": "/lib/app/js/models/repositories"
         "app/utils": "/lib/app/js/utils"
         "com/jquery/jquery": "/lib/com/jquery/js/jquery"
         "com/jquery/jquery.pjax": "/lib/com/jquery-pjax/js/jquery.pjax"

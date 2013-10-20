@@ -1,11 +1,13 @@
 define(
   [
     "app/application/router"
-    "app/utils"
+    "app/views/application"
   ]
-  (Router)->
+  (Router, View)->
     class Application
       constructor: (options)->
+        @view = new View()
+        $("#contents").append @view.render().el
         @router = new Router(options)
         Backbone.history.start(
           pushState: true

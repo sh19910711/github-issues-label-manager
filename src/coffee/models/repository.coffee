@@ -4,6 +4,9 @@ define(
   ]
   (Backbone)->
     class Repository extends Backbone.Model
-      initialize: ()->
-        console.log "@Model::Repository#initialize"
+      defaults:
+        full_name: ""
+        id: ""
+        name: ""
+      initialize: (options)->
 )

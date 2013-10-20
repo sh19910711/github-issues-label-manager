@@ -12,9 +12,13 @@
         return _ref;
       }
 
-      Repository.prototype.initialize = function() {
-        return console.log("@Model::Repository#initialize");
+      Repository.prototype.defaults = {
+        full_name: "",
+        id: "",
+        name: ""
       };
+
+      Repository.prototype.initialize = function(options) {};
 
       return Repository;
 

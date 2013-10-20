@@ -10,15 +10,19 @@ define(
     class Repositories extends Backbone.Collection
       model: Repository
       initialize: ()->
-        console.log "@Colleciton::Repositories#initialize"
       update: ()->
-        console.log "@Collection::Repositories#update"
         self = @
         Utils.request_api("get_new_repos").done(
           (list)->
             _(list).each (repo_info)->
-              self.add new Repository(
-                info: repo_info
-              )
+              self.add new Repository(repo_info)
         )
+      get_repos: ()->
+        self = @
+        Utils.request_api("get_repos").done(
+          (list)->
+            _(list).each (repo_info)->
+              self.add new Repository(repo_info)
+        )
+
 )

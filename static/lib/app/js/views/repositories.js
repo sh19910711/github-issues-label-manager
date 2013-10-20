@@ -14,14 +14,16 @@
 
       RepositoriesView.prototype.tagName = "table";
 
+      RepositoriesView.prototype.className = "table table-striped";
+
       RepositoriesView.prototype.initialize = function(options) {
-        return _.bindAll(this, "render");
+        _.bindAll(this, "render");
+        return this.collection.on("add", function(repo) {
+          return this.$el.append("<tr data-repo-id=\"" + (repo.get('id')) + "\"><td>" + (repo.get('name')) + "</></tr>");
+        }, this);
       };
 
       RepositoriesView.prototype.render = function() {
-        this.collection.each(function(repo) {
-          return console.log("repo = ", repo);
-        });
         return this;
       };
 

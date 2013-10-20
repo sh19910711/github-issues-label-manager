@@ -14,19 +14,24 @@
 
       Repositories.prototype.model = Repository;
 
-      Repositories.prototype.initialize = function() {
-        return console.log("@Colleciton::Repositories#initialize");
-      };
+      Repositories.prototype.initialize = function() {};
 
       Repositories.prototype.update = function() {
         var self;
-        console.log("@Collection::Repositories#update");
         self = this;
         return Utils.request_api("get_new_repos").done(function(list) {
           return _(list).each(function(repo_info) {
-            return self.add(new Repository({
-              info: repo_info
-            }));
+            return self.add(new Repository(repo_info));
+          });
+        });
+      };
+
+      Repositories.prototype.get_repos = function() {
+        var self;
+        self = this;
+        return Utils.request_api("get_repos").done(function(list) {
+          return _(list).each(function(repo_info) {
+            return self.add(new Repository(repo_info));
           });
         });
       };

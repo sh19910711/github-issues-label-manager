@@ -18,7 +18,11 @@
 
       UserReposPageView.prototype.initialize = function(options) {
         _.bindAll(this, "render");
-        return this.repositories = new Repositories();
+        this.repositories = new Repositories();
+        this.repositories.get_repos();
+        return this.repositories.on("add", function() {
+          return this.repositories_view.render();
+        }, this);
       };
 
       UserReposPageView.prototype.update_user_repos = function() {
@@ -26,12 +30,12 @@
       };
 
       UserReposPageView.prototype.render = function() {
-        var repositories_view;
         this.$el.append("<button id='update_user_repos' class='btn btn-primary'>Update</button>");
-        repositories_view = new RepositoriesView({
+        this.$el.append("<hr>");
+        this.repositories_view = new RepositoriesView({
           collection: this.repositories
         });
-        this.$el.append(repositories_view.render().el);
+        this.$el.append(this.repositories_view.render().el);
         return this;
       };
 

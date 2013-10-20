@@ -68,6 +68,12 @@ module Server
       end
     end
 
+    post "/api/get_repos" do
+      require_login do
+        login_user.github_repos_json
+      end
+    end
+
     post "/api/get_new_repos" do
       require_login do
         github = Server::Common::GitHub.new login_user.github_access_token

@@ -6,10 +6,10 @@ module Sinatra
       def self.registered app
         app.use(
           Rack::Csrf,
-          :field => 'csrf_token',
-          :raise => true,
-          :skip  => [
-          ],
+          :field      => 'csrf_token',
+          :raise      => true,
+          :check_also => app.csrf_settings[:check_also],
+          :skip       => app.csrf_settings[:skip],
         )
         app.configure :production, :development do
           app.helpers do

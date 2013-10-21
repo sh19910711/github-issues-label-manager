@@ -63,6 +63,10 @@ module Server
       def get_api_limit
         @client.ratelimit
       end
+
+      def add_label reponame, label_info
+        @client.add_label resolve_reponame(reponame), label_info[:name], label_info[:color]
+      end
     end
   end
 end

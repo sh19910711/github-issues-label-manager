@@ -17,7 +17,8 @@
     "jquery-pjax": "~1.7.3",
     "requirejs": "~2.1.9",
     "backbone": "~1.1.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "backbone-fetch-cache": "~1.1.2"
   },
   "exportsOverride": {
     "bootstrap": {
@@ -39,6 +40,9 @@
     },
     "backbone": {
       "js": "backbone-min.js"
+    },
+    "backbone-fetch-cache": {
+      "js": "backbone.fetch-cache.js"
     },
     "underscore": {
       "js": "underscore.js"

@@ -8,7 +8,11 @@ module Sinatra
           Rack::Csrf,
           :field => 'csrf_token',
           :raise => true,
+          :check_also => [
+            "GET"
+          ],
           :skip  => [
+            "GET:/"
           ],
         )
         app.configure :production, :development do

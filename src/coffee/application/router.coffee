@@ -1,8 +1,8 @@
 define(
   [
-    "com/underscore/underscore"
-    "com/backbone/backbone"
-    "com/jquery/jquery"
+    "underscore"
+    "backbone"
+    "jquery"
     "com/jquery/jquery.pjax"
     "app/utils"
     "app/views/application"
@@ -59,7 +59,10 @@ define(
         @load_contents "/MIT-LICENSE.#{path}"
 
       show_repos: ->
-        @application_view = new UserReposPageView
+        @application_view = new UserReposPageView(
+          repositories:
+            github_user_id: Utils.get_login_user().github_user_id
+        )
         @load_contents "/repos"
 
       show_repo: (github_user_id, github_repo_name)->

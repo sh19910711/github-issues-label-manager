@@ -58,7 +58,7 @@ module.exports = (grunt)->
   _(init_config).extend
     clean:
       "build": [
-        "static"
+        "lib/server/static"
       ]
 
   # copy

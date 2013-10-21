@@ -1,6 +1,6 @@
 define(
   [
-    "com/backbone/backbone"
+    "backbone"
     "app/collections/issues_labels"
     "app/views/issues_labels"
     "app/utils"

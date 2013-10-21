@@ -53,7 +53,7 @@ module Server
       # set static files
       app.configure :production, :development do
         app.set :public_folder, Proc.new {
-          File.join(root, "./static")
+          File.join(root, "static")
         }
       end
     end

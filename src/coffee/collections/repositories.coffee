@@ -1,28 +1,52 @@
 define(
   [
-    "com/backbone/backbone"
-    "com/jquery/jquery"
-    "com/underscore/underscore"
-    "app/models/repository"
+    "backbone"
+    "underscore"
+    "com/backbone/backbone-fetch-cache"
     "app/utils"
+    "app/models/repository"
   ]
-  (Backbone, $, _, Repository, Utils)->
+  (Backbone, _, dummy1, Utils, Repository)->
     class Repositories extends Backbone.Collection
       model: Repository
-      initialize: ()->
-      update: ()->
+
+      initialize: (options)->
+        @github_user_id = options["github_user_id"]
+        @
+
+      fetch_repos: ()->
         self = @
-        Utils.request_api("get_new_repos").done(
-          (list)->
-            _(list).each (repo_info)->
-              self.add new Repository(repo_info)
+        @fetch(
+          cache: true
+          type: "get"
+          data:
+            csrf_token: Utils.get_csrf_token()
+          url: "/api/repos/#{@github_user_id}"
+          dataType: "json"
+        ).done(
+          (repos)->
+            _(repos).each(
+              (repo)->
+                self.add repo
+            )
+            self.trigger "fetch-end"
         )
-      get_repos: ()->
+
+      fetch_new_repos: ()->
         self = @
-        Utils.request_api("get_repos").done(
-          (list)->
-            _(list).each (repo_info)->
-              self.add new Repository(repo_info)
+        @fetch(
+          type: "put"
+          url: "/api/repos/#{@github_user_id}"
+          data:
+            csrf_token: Utils.get_csrf_token()
+          dataType: "json"
+        ).done(
+          (repos)->
+            _(repos).each(
+              (repo)->
+                self.add repo
+            )
+            self.trigger "fetch-end"
         )
 
 )

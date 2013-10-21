@@ -1,18 +1,27 @@
 define(
   [
-    "com/backbone/backbone"
-    "com/underscore/underscore"
-    "app/collections/repositories"
+    "backbone"
+    "underscore"
   ]
-  (Backbone, _, Repositories)->
+  (Backbone, _)->
     class RepositoriesView extends Backbone.View
       tagName: "table"
       className: "table table-striped"
 
       initialize: (options)->
-        _.bindAll @, "render"
+        _.bindAll @, ["render"]
         @collection.on(
-          "add"
+          "fetch-end"
+          ()->
+            @render()
+          @
+        )
+        @collection.fetch_repos()
+        @
+
+      render: ()->
+        @$el.empty()
+        @collection.each(
           (repo)->
             @$el.append(
               "<tr data-repo-id=\"#{repo.get('id')}\"><td>" +
@@ -22,7 +31,5 @@ define(
             )
           @
         )
-
-      render: ()->
         @
 )

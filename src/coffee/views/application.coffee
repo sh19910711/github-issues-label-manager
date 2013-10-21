@@ -1,7 +1,7 @@
 define(
   [
-    "com/backbone/backbone"
-    "com/underscore/underscore"
+    "backbone"
+    "underscore"
   ]
   (Backbone, _)->
     class ApplicationView extends Backbone.View

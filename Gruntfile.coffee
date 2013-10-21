@@ -61,6 +61,21 @@ module.exports = (grunt)->
         "static"
       ]
 
+  # copy
+  _(init_config).extend
+    copy:
+      "build":
+        files: [
+          {
+            expand: true
+            src: [
+              "MIT-LICENSE.*"
+            ]
+            dest: "static/"
+            filter: 'isFile'
+          }
+        ]
+
   grunt.initConfig init_config
   
   # load npm tasks
@@ -74,6 +89,7 @@ module.exports = (grunt)->
       "clean:build"
       "bower:build"
       "coffee:build"
+      "copy:build"
     ]
   )
 

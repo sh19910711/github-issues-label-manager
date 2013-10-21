@@ -11,32 +11,32 @@ define(
       model: IssuesLabel
 
       initialize: (options)->
+        _.bindAll @, 'add_label', 'fetch_labels'
         @github_user_id = options["github_user_id"]
         @github_repo_name = options["github_repo_name"]
+        @url = "/api/issues_label/#{@github_user_id}/#{@github_repo_name}"
         @
 
-      fetch_labels: ()->
+      add_label: (label_info)=>
+        self = @
+        @create(
+          {
+            label_name: label_info.name
+            label_color: label_info.color
+            csrf_token: Utils.get_csrf_token()
+          }
+          {
+            success: ()->
+              key = Backbone.fetchCache.getCacheKey(@)
+              Backbone.fetchCache.clearItem key
+              self.fetch_labels()
+          }
+        )
+
+      fetch_labels: ()=>
         self = @
         @fetch(
           cache: true
-          type: "get"
-          data:
-            csrf_token: Utils.get_csrf_token()
-          url: "/api/issues_labels/#{@github_user_id}/#{@github_repo_name}"
-          dataType: "json"
-        ).done(
-          (labels)->
-            _(labels).each(
-              (label)->
-                self.add label
-            )
-            self.trigger "fetch-end"
-        )
-
-      fetch_new_labels: ()->
-        self = @
-        @fetch(
-          type: "put"
           data:
             csrf_token: Utils.get_csrf_token()
           url: "/api/issues_labels/#{@github_user_id}/#{@github_repo_name}"

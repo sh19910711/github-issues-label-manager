@@ -29,7 +29,6 @@ module Server
     get "/about" do
       haml_pjax :about_app
     end
-
   end
 end
 

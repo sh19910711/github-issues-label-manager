@@ -36,7 +36,7 @@ module Server
       def livereload_tag
         if ENV['RACK_ENV'] === "development"
           puts "livereload enabled."
-          "<script src='http://localhost:#{ENV["LIVERELOAD_PORT"]}/livereload.js'></script>"
+          "<script src='http://localhost:#{ENV["GILM_LIVERELOAD_PORT"] || ENV["LIVERELOAD_PORT"]}/livereload.js'></script>"
         else
           ""
         end

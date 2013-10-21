@@ -38,7 +38,7 @@ module.exports = (grunt)->
         ]
         livereload:
           enabled: true
-          port: process.env['LIVERELOAD_PORT']
+          port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
           extensions: ['js', 'css']
       'coffee': (path) ->
         if path.match(/^src\/coffee\//)

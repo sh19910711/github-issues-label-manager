@@ -8,14 +8,21 @@ define(
     class RepositoriesView extends Backbone.View
       tagName: "table"
       className: "table table-striped"
+
       initialize: (options)->
-        _.bindAll this, "render"
+        _.bindAll @, "render"
         @collection.on(
           "add"
           (repo)->
-            @$el.append "<tr data-repo-id=\"#{repo.get('id')}\"><td>#{repo.get('name')}</></tr>"
+            @$el.append(
+              "<tr data-repo-id=\"#{repo.get('id')}\"><td>" +
+              "<a class='pjaxable' href=\"/repos/#{repo.get('full_name')}\">" +
+              "#{repo.get('name')}" +
+              "</a></></tr>"
+            )
           @
         )
+
       render: ()->
         @
 )

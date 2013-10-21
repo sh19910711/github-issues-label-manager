@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["com/underscore/underscore", "com/backbone/backbone", "com/jquery/jquery", "com/jquery/jquery.pjax", "app/utils", "app/views/application", "app/views/user_repos_page"], function(_, Backbone, $, dummy1, Utils, ApplicationView, UserReposPageView) {
+  define(["com/underscore/underscore", "com/backbone/backbone", "com/jquery/jquery", "com/jquery/jquery.pjax", "app/utils", "app/views/application", "app/views/user_repos_page", "app/views/user_repo_page"], function(_, Backbone, $, dummy1, Utils, ApplicationView, UserReposPageView, UserRepoPageView) {
     var Router, _ref;
     return Router = (function(_super) {
       __extends(Router, _super);
@@ -28,7 +28,9 @@
         "": "show_index",
         "about": "show_about",
         "version": "show_version",
-        "repos": "show_repos"
+        "repos": "show_repos",
+        "repos/:github_user_id/:github_repo_name": "show_repo",
+        "user_status": "show_user_status"
       };
 
       Router.prototype.show_index = function() {
@@ -43,9 +45,23 @@
         return this.load_contents("/version");
       };
 
+      Router.prototype.show_user_status = function() {
+        return this.load_contents("/user_status");
+      };
+
       Router.prototype.show_repos = function() {
-        this.application_view = UserReposPageView;
+        this.application_view = new UserReposPageView;
         return this.load_contents("/repos");
+      };
+
+      Router.prototype.show_repo = function(github_user_id, github_repo_name) {
+        this.application_view = new UserRepoPageView({
+          issues_labels: {
+            github_user_id: github_user_id,
+            github_repo_name: github_repo_name
+          }
+        });
+        return this.load_contents("/repos/" + github_user_id + "/" + github_repo_name);
       };
 
       Router.prototype.load_contents = function(path) {
@@ -58,7 +74,7 @@
           var root;
           if ($("#application-view").size() > 0) {
             root = Utils.get_root();
-            root.application.view = new self.application_view();
+            root.application.view = self.application_view;
             return $("#application-view").append(root.application.view.render().el);
           }
         });

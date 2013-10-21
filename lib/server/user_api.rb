@@ -18,12 +18,6 @@ module Server
         end
       end
 
-      app.post "/api/get_repo_labels" do
-        require_login do
-          [].to_json
-        end
-      end
-
       app.post "/api/get_new_issues_labels" do
         require_login do
           IssuesLabels.update_by_reponame(

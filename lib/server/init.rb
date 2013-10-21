@@ -6,17 +6,11 @@ module Server
   module Init
     include Server::Models
     def self.registered app
-      app.helpers Server::Common::Helpers
-
       # Session
       app.set :session_settings, {
         :key      => SESSION_KEY,
         :secret   => SESSION_SECRET,
       }
-      app.register Sinatra::Extension::Session
-
-      app.register Sinatra::Extension::Csrf
-      app.register Sinatra::Extension::Pjax
 
       # GitHub
       app.set :github_settings, {
@@ -28,7 +22,7 @@ module Server
           github_user_id = github.get_user_id
           # set github user info
           selected = User.where(:github_user_id => github_user_id).cache
-          session[:first_login] = selected.count == 0
+          session[:first_login] = ! selected.exists?
           user = User.find_or_create_by(
             :github_user_id => github_user_id,
           )
@@ -45,6 +39,11 @@ module Server
           }
         end
       }
+
+      app.helpers Server::Common::Helpers
+      app.register Sinatra::Extension::Session
+      app.register Sinatra::Extension::Csrf
+      app.register Sinatra::Extension::Pjax
       app.register Sinatra::Extension::GitHub
     end
   end

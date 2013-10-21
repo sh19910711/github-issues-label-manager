@@ -29,5 +29,11 @@ describe "T001" do
       p @client.get_repo_issues_label "js2ch"
     end
   end
+  describe "005: API Limit" do
+    it "001: 残り回数の確認" do
+      return unless TEST_EYE_GREP_MODE
+      p @client.get_api_limit
+    end
+  end
 end
 

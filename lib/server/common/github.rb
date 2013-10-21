@@ -51,13 +51,17 @@ module Server
         issues
       end
 
-      def get_repo_issues_label reponame
+      def get_repo_issues_labels reponame
         @client.labels(resolve_reponame(reponame)).map {|label|
           {
             :name => label.name,
             :color => label.color,
           }
         }
+      end
+
+      def get_api_limit
+        @client.ratelimit
       end
     end
   end

@@ -4,8 +4,9 @@
     %meta{:charset => "UTF-8"}
     %meta{"data-csrf-token" => get_csrf_token}
     %title GitHub Issues Label Manager
-    %link{:rel => "stylesheet", :href => "lib/com/bootstrap/css/bootstrap.css"}
-    %script{:src => "lib/com/requirejs/js/require.js", "data-main" => "lib/app/js/main"}
+    %link{:rel => "stylesheet", :href => "/lib/com/bootstrap/css/bootstrap.css"}
+    %script{:src => "/lib/com/requirejs/js/require.js", "data-main" => "/lib/app/js/main"}
+    = livereload_tag
   %body
     %div#wrapper.container
       %div#header.container

@@ -1,6 +1,9 @@
 require "server/config"
+require "server/init"
 require "server/common"
 require "server/models"
+require "server/user_api"
+require "server/user_page"
 require "sinatra/base"
 
 # Sinatra::Extensions
@@ -11,41 +14,11 @@ require "sinatra/ext/pjax"
 
 module Server
   class App < Sinatra::Base
-    include Server::Models
-    set :session_settings, {
-      :key      => SESSION_KEY,
-      :secret   => SESSION_SECRET,
-    }
-    register Sinatra::Extension::Session
-    register Sinatra::Extension::Csrf
-    register Sinatra::Extension::Pjax
+    register Server::Init
+    register Server::UserAPI
+    register Server::UserPage
 
-    set :github_settings, {
-      :client_id              => GITHUB_CLIENT_ID,
-      :client_secret          => GITHUB_CLIENT_SECRET,
-      :success_callback_url   => "/",
-      :success_callback_func  => Proc.new do
-        github = Server::Common::GitHub.new session[:github_access_token]
-        github_user_id = github.get_user_id
-        # set github user info
-        selected = User.where(:github_user_id => github_user_id).cache
-        session[:first_login] = selected.count == 0
-        user = User.find_or_create_by(
-          :github_user_id => github_user_id,
-        )
-        user.update_attributes(
-          :github_user_id => github_user_id,
-          :github_access_token => session[:github_access_token],
-        )
-        # set login session
-        session[:login] = {
-          :ip => request.ip,
-          :github_user_id => github_user_id,
-        }
-      end
-    }
-    register Sinatra::Extension::GitHub
-
+    # set static files
     configure :production, :development do
       set :public_folder, Proc.new { File.join(root, "../../static") }
     end
@@ -62,58 +35,6 @@ module Server
       haml_pjax :about_app
     end
 
-    get "/version" do
-      require_login do
-        haml_pjax :version
-      end
-    end
-
-    post "/api/get_repos" do
-      require_login do
-        login_user.github_repos_json
-      end
-    end
-
-    post "/api/get_new_repos" do
-      require_login do
-        github = Server::Common::GitHub.new login_user.github_access_token
-        repos_json = github.get_repos.to_json
-        login_user.update_attributes(
-          :github_repos_json => repos_json,
-        )
-        repos_json
-      end
-    end
-
-    get "/repos" do
-      haml_pjax :user_repos
-    end
-
-    post "/logout" do
-      session.clear
-      redirect "/"
-    end
-
-    helpers do
-      def is_login?
-        defined?(session[:login][:ip]) &&
-          session[:login][:ip] == request.ip
-      end
-
-      def login_user
-        halt 403 unless is_login?
-        User.where(:github_user_id => session[:login][:github_user_id]).cache.first
-      end
-
-      def partial view
-        haml view
-      end
-
-      def require_login &block
-        redirect "/" unless is_login?
-        yield
-      end
-    end
   end
 end
 

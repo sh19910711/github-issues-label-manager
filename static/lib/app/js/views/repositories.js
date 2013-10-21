@@ -19,7 +19,7 @@
       RepositoriesView.prototype.initialize = function(options) {
         _.bindAll(this, "render");
         return this.collection.on("add", function(repo) {
-          return this.$el.append("<tr data-repo-id=\"" + (repo.get('id')) + "\"><td>" + (repo.get('name')) + "</></tr>");
+          return this.$el.append(("<tr data-repo-id=\"" + (repo.get('id')) + "\"><td>") + ("<a class='pjaxable' href=\"/repos/" + (repo.get('full_name')) + "\">") + ("" + (repo.get('name'))) + "</a></></tr>");
         }, this);
       };
 

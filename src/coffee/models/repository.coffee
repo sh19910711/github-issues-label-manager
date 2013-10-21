@@ -1,6 +1,6 @@
 define(
   [
-    "com/backbone/backbone"
+    "backbone"
   ]
   (Backbone)->
     class Repository extends Backbone.Model
@@ -9,4 +9,5 @@ define(
         id: ""
         name: ""
       initialize: (options)->
+        @
 )

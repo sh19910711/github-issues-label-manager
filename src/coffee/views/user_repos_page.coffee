@@ -1,6 +1,6 @@
 define(
   [
-    "com/backbone/backbone"
+    "backbone"
     "app/collections/repositories"
     "app/views/repositories"
   ]
@@ -11,24 +11,17 @@ define(
 
       initialize: (options)->
         _.bindAll @, "render"
-        @repositories = new Repositories()
-        @repositories.get_repos()
+        @repositories = new Repositories(options.repositories)
         @repositories_view = new RepositoriesView(
           collection: @repositories
         )
-        @repositories.on(
-          "add"
-          ->
-            @repositories_view.render()
-          @
-        )
 
       update_user_repos: ()->
-        @repositories.update()
+        @repositories.fetch_new_repos()
 
       render: ()->
-        this.$el.append "<button id='update_user_repos' class='btn btn-primary'>Update Repositories</button>"
-        this.$el.append "<hr>"
-        this.$el.append @repositories_view.render().el
+        @$el.append "<button id='update_user_repos' class='btn btn-primary'>Update Repositories</button>"
+        @$el.append "<hr>"
+        @$el.append @repositories_view.render().el
         @
 )

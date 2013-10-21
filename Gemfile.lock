@@ -95,6 +95,9 @@ GEM
     slop (3.4.6)
     tilt (1.4.1)
     tzinfo (0.3.38)
+    yard (0.8.7.2)
+    yard-sinatra (1.0.0)
+      yard (~> 0.7)
 
 PLATFORMS
   ruby
@@ -116,3 +119,5 @@ DEPENDENCIES
   shotgun
   sinatra
   sinatra-contrib
+  yard
+  yard-sinatra

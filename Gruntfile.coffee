@@ -7,7 +7,7 @@ module.exports = (grunt)->
     bower:
       "build":
         options:
-          targetDir:      "static/lib/com/"
+          targetDir:      "lib/server/static/lib/com/"
           layout:         "byComponent"
           install:        true
           verbose:        true
@@ -23,7 +23,7 @@ module.exports = (grunt)->
             expand: true
             cwd: "./src/coffee/"
             src: "**/*.coffee"
-            dest: "./static/lib/app/js/"
+            dest: "./lib/server/static/lib/app/js/"
             ext: ".js"
           }
         ]
@@ -33,12 +33,12 @@ module.exports = (grunt)->
     esteWatch:
       options:
         dirs: [
-          './static/lib/app/**/'
+          './lib/server/static/lib/app/**/'
           './src/coffee/**/'
         ]
         livereload:
           enabled: true
-          port: process.env['LIVERELOAD_PORT']
+          port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
           extensions: ['js', 'css']
       'coffee': (path) ->
         if path.match(/^src\/coffee\//)
@@ -46,7 +46,7 @@ module.exports = (grunt)->
             expand: true
             cwd: "./src/coffee"
             src: path.match(/^src\/coffee\/(.*)/)[1]
-            dest: "./static/lib/app/js/"
+            dest: "./lib/server/static/lib/app/js/"
             ext: ".js"
           ]
           grunt.config ['coffee', 'update', 'files'], files
@@ -58,8 +58,23 @@ module.exports = (grunt)->
   _(init_config).extend
     clean:
       "build": [
-        "static"
+        "lib/server/static"
       ]
+
+  # copy
+  _(init_config).extend
+    copy:
+      "build":
+        files: [
+          {
+            expand: true
+            src: [
+              "MIT-LICENSE.*"
+            ]
+            dest: "lib/server/static/"
+            filter: 'isFile'
+          }
+        ]
 
   grunt.initConfig init_config
   
@@ -74,6 +89,14 @@ module.exports = (grunt)->
       "clean:build"
       "bower:build"
       "coffee:build"
+      "copy:build"
+    ]
+  )
+
+  grunt.registerTask(
+    "watch"
+    [
+      "esteWatch"
     ]
   )
 

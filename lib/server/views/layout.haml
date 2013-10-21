@@ -3,6 +3,8 @@
   %head
     %meta{:charset => "UTF-8"}
     %meta{"data-csrf-token" => get_csrf_token}
+    - if is_login?
+      %meta{"data-login-user-github-user-id" => login_user.github_user_id}
     %title GitHub Issues Label Manager
     %link{:rel => "stylesheet", :href => "/lib/com/bootstrap/css/bootstrap.css"}
     %script{:src => "/lib/com/requirejs/js/require.js", "data-main" => "/lib/app/js/main"}

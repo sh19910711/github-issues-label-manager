@@ -1,4 +1,4 @@
-<% url = ENV['MONGODB_URL'] || ENV['MONGOLAB_URI'] || ENV['MONGOHQ_URL'] %>
+<% url = ENV['GILM_MONGODB_URL'] || ENV['MONGODB_URL'] || ENV['MONGOLAB_URI'] || ENV['MONGOHQ_URL'] %>
 <% if url %>
   <% uri = URI.parse(url) %>
 production:

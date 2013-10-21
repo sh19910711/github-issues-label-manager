@@ -23,6 +23,8 @@ group :development do
   gem "pry"
   gem "better_errors"
   gem "binding_of_caller"
+  gem "yard"
+  gem "yard-sinatra"
 end
 
 group :test do

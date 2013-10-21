@@ -5,23 +5,18 @@ requirejs(
   ->
     requirejs(
       [
-        "com/jquery/jquery"
+        "jquery"
         "com/bootstrap/bootstrap"
+        "app/application"
+        "app/utils"
       ]
-      ($)->
+      ($, dummy1, Application, Utils)->
         $(
           ->
-            requirejs(
-              [
-                "app/application"
-                "app/utils"
-              ]
-              (Application, Utils)->
-                root = Utils.get_root()
-                root.application = new Application(
-                  side_id: "#side"
-                  container_id: "#container"
-                )
+            root = Utils.get_root()
+            root.application = new Application(
+              side_id: "#side"
+              container_id: "#container"
             )
         )
     )

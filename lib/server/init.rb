@@ -49,6 +49,13 @@ module Server
       app.register Sinatra::Extension::Csrf
       app.register Sinatra::Extension::Pjax
       app.register Sinatra::Extension::GitHub
+
+      # set static files
+      app.configure :production, :development do
+        app.set :public_folder, Proc.new {
+          File.join(root, "./static")
+        }
+      end
     end
   end
 end

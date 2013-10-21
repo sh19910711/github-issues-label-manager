@@ -18,13 +18,6 @@ module Server
     register Server::UserAPI
     register Server::UserPage
 
-    # set static files
-    configure :production, :development do
-      set :public_folder, Proc.new {
-        File.join(root, "./static")
-      }
-    end
-
     get "/" do
       if is_login?
         haml_pjax :user_home

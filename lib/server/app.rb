@@ -20,7 +20,9 @@ module Server
 
     # set static files
     configure :production, :development do
-      set :public_folder, Proc.new { File.join(root, "../../static") }
+      set :public_folder, Proc.new {
+        File.join(root, "./static")
+      }
     end
 
     get "/" do

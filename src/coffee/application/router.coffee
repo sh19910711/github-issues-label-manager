@@ -33,6 +33,7 @@ define(
             return false
         )
 
+
       routes:
         "": "show_index"
         "about": "show_about"
@@ -40,6 +41,7 @@ define(
         "repos": "show_repos"
         "repos/:github_user_id/:github_repo_name": "show_repo"
         "user_status": "show_user_status"
+        "MIT-LICENSE.:suffix": "show_mit_license"
 
       show_index: ->
         @load_contents "/"
@@ -52,6 +54,9 @@ define(
 
       show_user_status: ->
         @load_contents "/user_status"
+
+      show_mit_license: (path)->
+        @load_contents "/MIT-LICENSE.#{path}"
 
       show_repos: ->
         @application_view = new UserReposPageView

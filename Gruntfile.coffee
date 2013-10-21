@@ -7,7 +7,7 @@ module.exports = (grunt)->
     bower:
       "build":
         options:
-          targetDir:      "static/lib/com/"
+          targetDir:      "lib/server/static/lib/com/"
           layout:         "byComponent"
           install:        true
           verbose:        true
@@ -23,7 +23,7 @@ module.exports = (grunt)->
             expand: true
             cwd: "./src/coffee/"
             src: "**/*.coffee"
-            dest: "./static/lib/app/js/"
+            dest: "./lib/server/static/lib/app/js/"
             ext: ".js"
           }
         ]
@@ -33,7 +33,7 @@ module.exports = (grunt)->
     esteWatch:
       options:
         dirs: [
-          './static/lib/app/**/'
+          './lib/server/static/lib/app/**/'
           './src/coffee/**/'
         ]
         livereload:
@@ -46,7 +46,7 @@ module.exports = (grunt)->
             expand: true
             cwd: "./src/coffee"
             src: path.match(/^src\/coffee\/(.*)/)[1]
-            dest: "./static/lib/app/js/"
+            dest: "./lib/server/static/lib/app/js/"
             ext: ".js"
           ]
           grunt.config ['coffee', 'update', 'files'], files
@@ -71,7 +71,7 @@ module.exports = (grunt)->
             src: [
               "MIT-LICENSE.*"
             ]
-            dest: "static/"
+            dest: "lib/server/static/"
             filter: 'isFile'
           }
         ]

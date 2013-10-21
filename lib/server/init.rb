@@ -40,6 +40,10 @@ module Server
         end
       }
 
+      # Csrf
+      app.set :csrf_settings, {
+      }
+
       app.helpers Server::Common::Helpers
       app.register Sinatra::Extension::Session
       app.register Sinatra::Extension::Csrf

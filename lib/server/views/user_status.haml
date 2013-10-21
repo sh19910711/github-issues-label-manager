@@ -1,0 +1,13 @@
+%h2 GitHub API Status
+%table.table
+  %tr
+    %td
+      limit
+    %td
+      remaining
+  %tr
+    %td
+      = @user[:github_api_limit]
+    %td
+      = @user[:github_api_remaining]
+

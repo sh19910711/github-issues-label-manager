@@ -20,6 +20,9 @@
         _.bindAll(this, "render");
         this.repositories = new Repositories();
         this.repositories.get_repos();
+        this.repositories_view = new RepositoriesView({
+          collection: this.repositories
+        });
         return this.repositories.on("add", function() {
           return this.repositories_view.render();
         }, this);
@@ -30,11 +33,8 @@
       };
 
       UserReposPageView.prototype.render = function() {
-        this.$el.append("<button id='update_user_repos' class='btn btn-primary'>Update</button>");
+        this.$el.append("<button id='update_user_repos' class='btn btn-primary'>Update Repositories</button>");
         this.$el.append("<hr>");
-        this.repositories_view = new RepositoriesView({
-          collection: this.repositories
-        });
         this.$el.append(this.repositories_view.render().el);
         return this;
       };

@@ -1,5 +1,5 @@
 require "oauth2"
-require "addressable/uri"
+# require "addressable/uri"
 
 module Sinatra
   module Extension

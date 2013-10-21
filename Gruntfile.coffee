@@ -28,6 +28,32 @@ module.exports = (grunt)->
           }
         ]
 
+  # este-watch
+  _(init_config).extend
+    esteWatch:
+      options:
+        dirs: [
+          './static/lib/app/**/'
+          './src/coffee/**/'
+        ]
+        livereload:
+          enabled: true
+          port: process.env['LIVERELOAD_PORT']
+          extensions: ['js', 'css']
+      'coffee': (path) ->
+        if path.match(/^src\/coffee\//)
+          files = [
+            expand: true
+            cwd: "./src/coffee"
+            src: path.match(/^src\/coffee\/(.*)/)[1]
+            dest: "./static/lib/app/js/"
+            ext: ".js"
+          ]
+          grunt.config ['coffee', 'update', 'files'], files
+          ['coffee:update']
+        else
+          []
+
   # clean
   _(init_config).extend
     clean:

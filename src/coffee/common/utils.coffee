@@ -1,7 +1,6 @@
 define(
   [
     "jquery"
-    "backbone"
   ]
   ($)->
     class Utils
@@ -10,9 +9,7 @@ define(
         $("meta[data-csrf-token]").data("csrf-token")
 
       @get_login_user: ->
-        res = {}
-        res.github_user_id = $("meta[data-login-user-github-user-id]").data("login-user-github-user-id")
-        res
+        github_user_id: $("meta[data-login-user-github-user-id]").data("login-user-github-user-id")
 
       @get_root: ->
         window

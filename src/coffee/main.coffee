@@ -8,16 +8,13 @@ requirejs(
         "jquery"
         "com/bootstrap/bootstrap"
         "app/application"
-        "app/utils"
+        "app/common"
       ]
-      ($, dummy1, Application, Utils)->
+      ($, dummy1, Application, Common)->
         $(
           ->
-            root = Utils.get_root()
-            root.application = new Application(
-              side_id: "#side"
-              container_id: "#container"
-            )
+            root = Common.Utils.get_root()
+            root.application = new Application()
         )
     )
 )

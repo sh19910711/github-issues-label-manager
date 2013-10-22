@@ -1,10 +1,9 @@
 define(
   [
     "backbone"
-    "app/collections/repositories"
-    "app/views/repositories"
+    "app/repositories"
   ]
-  (Backbone, Repositories, RepositoriesView)->
+  (Backbone, Repositories)->
     class UserReposPageView extends Backbone.View
       events:
         "click button#update_user_repos": "update_user_repos"

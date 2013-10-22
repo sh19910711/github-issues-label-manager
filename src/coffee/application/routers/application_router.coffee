@@ -4,35 +4,27 @@ define(
     "backbone"
     "jquery"
     "com/jquery/jquery.pjax"
-    "app/utils"
-    "app/views/application"
-    "app/views/user_repos_page"
-    "app/views/user_repo_page"
+    "app/common"
+    "app/page"
   ]
   (
     _
     Backbone
     $
     dummy1
-    Utils
-    ApplicationView
-    UserReposPageView
-    UserRepoPageView
+    Page
   )->
-    class Router extends Backbone.Router
+    class ApplicationRouter extends Backbone.Router
       initialize: (options)->
-        @application_view = ApplicationView
-        @container_id = options.container_id
-        @side_id = options.side_id
-        self = @
+        @container_id = "#container_id"
+        @side_id = "#side_id"
         $(document).on(
           'click',
           'a.pjaxable',
           ()->
-            self.navigate $(@).attr('href'), true
+            Backbone.Router.navigate $(@).attr('href'), true
             return false
         )
-
 
       routes:
         "": "show_index"
@@ -59,14 +51,14 @@ define(
         @load_contents "/MIT-LICENSE.#{path}"
 
       show_repos: ->
-        @application_view = new UserReposPageView(
+        @application_view = new Page.Views.UserReposView(
           repositories:
-            github_user_id: Utils.get_login_user().github_user_id
+            github_user_id: Common.Utils.get_login_user().github_user_id
         )
         @load_contents "/repos"
 
       show_repo: (github_user_id, github_repo_name)->
-        @application_view = new UserRepoPageView(
+        @application_view = new Page.Views.UserRepoView(
           issues_labels:
             github_user_id: github_user_id
             github_repo_name: github_repo_name
@@ -74,17 +66,17 @@ define(
         @load_contents "/repos/#{github_user_id}/#{github_repo_name}"
 
       load_contents: (path)->
-        self = @
         $.pjax(
           url: path
           container: @container_id
         ).done(
-          ->
+          =>
             # set application view
-            if $("#application-view").size() > 0
-              root = Utils.get_root()
+            console.log @application_view.el
+            if $(@application_view.el).size() > 0
+              root = Common.Utils.get_root()
               root.application.view = self.application_view
-              $("#application-view").append root.application.view.render().el
+              $(@application_view.el).append root.application.view.render().el
         )
 
 )

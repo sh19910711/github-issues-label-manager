@@ -4,18 +4,16 @@ define(
   ()->
     requirejs.config(
       paths:
-        "app/application/router":             "/lib/app/js/application/router"
-        "app/application":                    "/lib/app/js/application"
-        "app/views/application":              "/lib/app/js/views/application"
-        "app/views/repositories":             "/lib/app/js/views/repositories"
-        "app/views/user_repos_page":          "/lib/app/js/views/user_repos_page"
-        "app/views/user_repo_page":           "/lib/app/js/views/user_repo_page"
-        "app/views/issues_labels":            "/lib/app/js/views/issues_labels"
-        "app/models/repository":              "/lib/app/js/models/repository"
-        "app/models/issues_label":            "/lib/app/js/models/issues_label"
-        "app/collections/repositories":       "/lib/app/js/collections/repositories"
-        "app/collections/issues_labels":      "/lib/app/js/collections/issues_labels"
-        "app/utils":                          "/lib/app/js/utils"
+        # app
+        "app/common":         "/lib/app/js/common"
+        "app/common/utils":         "/lib/app/js/common/utils"
+        "app/application":    "/lib/app/js/application"
+        "app/label":          "/lib/app/js/label"
+        "app/labels":         "/lib/app/js/labels"
+        "app/page":           "/lib/app/js/page"
+        "app/repositories":   "/lib/app/js/repositories"
+        "app/repository":     "/lib/app/js/repository"
+        # components
         "com/jquery/jquery.pjax":             "/lib/com/jquery-pjax/js/jquery.pjax"
         "com/bootstrap/bootstrap":            "/lib/com/bootstrap/js/bootstrap"
         "com/backbone/backbone-fetch-cache":  "/lib/com/backbone-fetch-cache/js/backbone.fetch-cache"

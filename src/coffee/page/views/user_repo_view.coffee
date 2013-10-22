@@ -1,11 +1,9 @@
 define(
   [
     "backbone"
-    "app/collections/issues_labels"
-    "app/views/issues_labels"
-    "app/utils"
+    "app/labels"
   ]
-  (Backbone, IssuesLabels, IssuesLabelsView, Utils)->
+  (Backbone, Labels)->
     class UserRepoPageView extends Backbone.View
       initialize: (options)->
         _.bindAll @, ["render"]

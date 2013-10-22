@@ -2,13 +2,12 @@ define(
   [
     "backbone"
     "underscore"
+    "app/label"
     "com/backbone/backbone-fetch-cache"
-    "app/utils"
-    "app/models/issues_label"
   ]
-  (Backbone, _, dummy1, Utils, IssuesLabel)->
-    class IssuesLabels extends Backbone.Collection
-      model: IssuesLabel
+  (Backbone, _, Label)->
+    class Labels extends Backbone.Collection
+      model: Label.Models.Label
 
       initialize: (options)->
         _.bindAll @, 'add_label', 'fetch_labels'
@@ -17,36 +16,35 @@ define(
         @url = "/api/issues_label/#{@github_user_id}/#{@github_repo_name}"
         @
 
+    _(Labels::).extend
       add_label: (label_info)=>
-        self = @
         @create(
           {
             label_name: label_info.name
             label_color: label_info.color
-            csrf_token: Utils.get_csrf_token()
+            csrf_token: Common.Utils.get_csrf_token()
           }
           {
-            success: ()->
+            success: ()=>
               key = Backbone.fetchCache.getCacheKey(@)
               Backbone.fetchCache.clearItem key
-              self.fetch_labels()
+              @fetch_labels()
           }
         )
-
       fetch_labels: ()=>
-        self = @
         @fetch(
           cache: true
           data:
-            csrf_token: Utils.get_csrf_token()
+            csrf_token: Common.Utils.get_csrf_token()
           url: "/api/issues_labels/#{@github_user_id}/#{@github_repo_name}"
           dataType: "json"
         ).done(
-          (labels)->
+          (labels)=>
             _(labels).each(
               (label)->
-                self.add label
+                @add label
             )
-            self.trigger "fetch-end"
+            @trigger "fetch-end"
         )
+    Labels
 )

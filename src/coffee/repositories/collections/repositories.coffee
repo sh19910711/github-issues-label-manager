@@ -3,10 +3,9 @@ define(
     "backbone"
     "underscore"
     "com/backbone/backbone-fetch-cache"
-    "app/utils"
-    "app/models/repository"
+    "app/repository"
   ]
-  (Backbone, _, dummy1, Utils, Repository)->
+  (Backbone, _, dummy1, Repository)->
     class Repositories extends Backbone.Collection
       model: Repository
 

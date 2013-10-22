@@ -15,23 +15,60 @@ describe "T002: Label", ->
   describe "001: name", ->
     beforeEach ->
       nock("http://localhost:8888")
-        .post("/repo_name/user_name")
-        .reply(200, {result: "OK"})
-      @label = new @Label()
-      @label_url = "http://localhost:8888/repo_name/user_name"
+        .intercept("/user_name/repo_name", "POST")
+        .reply(
+          200
+          (url, body)->
+            console.log "HTTP POST"
+            type: "post"
+        )
+      nock("http://localhost:8888")
+        .intercept("/user_name/repo_name", "PUT")
+        .reply(
+          200
+          (url, body)->
+            console.log "HTTP PUT"
+            type: "post"
+        )
+      nock("http://localhost:8888")
+        .intercept("/user_name/repo_name", "DELETE")
+        .reply(
+          200
+          (url, body)->
+            console.log "HTTP DELETE"
+            type: "delete"
+        )
+    it "001: #set, #save", (done)->
+      @label = new @Label(
+      )
+      @label_url = "http://localhost:8888/user_name/repo_name"
       @label.url = @label_url
-    it "001: #set", (done)->
       @label.set "name", "category1/child-category1/label1"
       @label.get("name").should.equal "category1/child-category1/label1"
-      @label.save().done(
-        ->
-          done()
+      @label.save(
+        {
+          name: "category1/child-category2/label1"
+        }
+        {
+          success:
+            (ret)=>
+              console.log arguments
+              ret.get("type").should.equal "post"
+              @label.get("name").should.equal "category1/child-category2/label1"
+              done()
+        }
       )
-    it "002: #set", (done)->
+    it "002: #set, #destroy", (done)->
+      @label = new @Label(
+        id: "label1"
+      )
+      @label_url = "http://localhost:8888/user_name/repo_name"
+      @label.url = @label_url
       @label.set "name", "カテゴリ1/子カテゴリ1/ラベル1"
       @label.get("name").should.equal "カテゴリ1/子カテゴリ1/ラベル1"
-      @label.save().done(
-        ->
+      @label.destroy(
+        success: (model, ret)=>
+          console.log "after destroy: ", model
           done()
       )
 

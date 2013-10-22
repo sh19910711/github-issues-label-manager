@@ -11,7 +11,7 @@ define(
     Backbone
     Common
   )->
-    class IssuesLabel extends Backbone.Model
+    class Label extends Backbone.Model
       defaults:
         name: ""
         color: ""

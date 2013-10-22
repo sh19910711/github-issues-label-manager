@@ -7,6 +7,8 @@ _(global).extend
   backbone: require "backbone"
   documentElement: {}
   requirejs: require "requirejs"
+  sinon: require "sinon"
+  nock: require "nock"
 
 requirejs.config(
   baseUrl: "/home/dev/workspace/github-issues-label-manager/lib/server/static"
@@ -25,7 +27,6 @@ requirejs.config(
     "com/jquery/jquery.pjax":             "lib/com/jquery-pjax/js/jquery.pjax"
     "com/bootstrap/bootstrap":            "lib/com/bootstrap/js/bootstrap"
     "com/backbone/backbone-fetch-cache":  "lib/com/backbone-fetch-cache/js/backbone.fetch-cache"
-    # generals
   shim:
     "com/jquery/jquery.pjax":
       exports: "jQuery.fn.pjax"

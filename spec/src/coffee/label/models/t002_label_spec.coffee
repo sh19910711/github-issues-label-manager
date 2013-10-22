@@ -1,5 +1,4 @@
-describe "T002", ->
-
+describe "T002: Label", ->
   before (done)->
     requirejs(
       [
@@ -8,21 +7,33 @@ describe "T002", ->
       (
         Label
       )=>
-        @label = Label
+        @Label = Label
         done()
     )
+    backbone.ajax = jQuery.ajax
 
-  describe "001", ->
-    it "001", ()->
-      label = new @label(
-        name: "test1"
-        color: "#FF0000"
+  describe "001: name", ->
+    beforeEach ->
+      nock("http://localhost:8888")
+        .post("/repo_name/user_name")
+        .reply(200, {result: "OK"})
+      @label = new @Label()
+      @label_url = "http://localhost:8888/repo_name/user_name"
+      @label.url = @label_url
+    it "001: #set", (done)->
+      @label.set "name", "category1/child-category1/label1"
+      @label.get("name").should.equal "category1/child-category1/label1"
+      @label.save().done(
+        ->
+          done()
       )
-      label.get("name").should.equal "test1"
-    it "002", ()->
-      label = new @label(
-        name: "test2"
-        color: "#00FF00"
+    it "002: #set", (done)->
+      @label.set "name", "カテゴリ1/子カテゴリ1/ラベル1"
+      @label.get("name").should.equal "カテゴリ1/子カテゴリ1/ラベル1"
+      @label.save().done(
+        ->
+          done()
       )
-      label.get("name").should.equal "test2"
+
+  describe "002: color", ->
 

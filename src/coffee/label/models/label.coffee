@@ -1,8 +1,16 @@
 define(
   [
+    "underscore"
+    "jquery"
     "backbone"
+    "app/common"
   ]
-  (Backbone)->
+  (
+    _
+    $
+    Backbone
+    Common
+  )->
     class IssuesLabel extends Backbone.Model
       defaults:
         name: ""

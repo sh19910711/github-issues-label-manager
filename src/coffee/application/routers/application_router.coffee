@@ -1,17 +1,17 @@
 define(
   [
     "underscore"
-    "backbone"
     "jquery"
-    "com/jquery/jquery.pjax"
+    "backbone"
     "app/common"
     "app/page"
+    "com/jquery/jquery.pjax"
   ]
   (
     _
-    Backbone
     $
-    dummy1
+    Backbone
+    Common
     Page
   )->
     class ApplicationRouter extends Backbone.Router
@@ -21,8 +21,8 @@ define(
         $(document).on(
           'click',
           'a.pjaxable',
-          ()->
-            Backbone.Router.navigate $(@).attr('href'), true
+          (e)=>
+            @navigate $(e.target).attr('href'), true
             return false
         )
 
@@ -51,14 +51,14 @@ define(
         @load_contents "/MIT-LICENSE.#{path}"
 
       show_repos: ->
-        @application_view = new Page.Views.UserReposView(
+        @page_view = new Page.Views.UserReposView(
           repositories:
             github_user_id: Common.Utils.get_login_user().github_user_id
         )
         @load_contents "/repos"
 
       show_repo: (github_user_id, github_repo_name)->
-        @application_view = new Page.Views.UserRepoView(
+        @page_view = new Page.Views.UserRepoView(
           issues_labels:
             github_user_id: github_user_id
             github_repo_name: github_repo_name
@@ -66,17 +66,16 @@ define(
         @load_contents "/repos/#{github_user_id}/#{github_repo_name}"
 
       load_contents: (path)->
+        console.log "@load_contents"
         $.pjax(
           url: path
-          container: @container_id
+          container: "#container"
         ).done(
           =>
+            $("#page-view").append @page_view.el
             # set application view
-            console.log @application_view.el
-            if $(@application_view.el).size() > 0
-              root = Common.Utils.get_root()
-              root.application.view = self.application_view
-              $(@application_view.el).append root.application.view.render().el
+            if $(@page_view.el).size() > 0
+              @page_view.render()
         )
 
 )

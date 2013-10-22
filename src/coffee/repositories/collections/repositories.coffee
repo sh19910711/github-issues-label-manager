@@ -1,13 +1,21 @@
 define(
   [
-    "backbone"
     "underscore"
-    "com/backbone/backbone-fetch-cache"
+    "jquery"
+    "backbone"
+    "app/common"
     "app/repository"
+    "com/backbone/backbone-fetch-cache"
   ]
-  (Backbone, _, dummy1, Repository)->
+  (
+    _
+    $
+    Backbone
+    Common
+    Repository
+  )->
     class Repositories extends Backbone.Collection
-      model: Repository
+      model: Repository.Models.Repository
 
       initialize: (options)->
         @github_user_id = options["github_user_id"]
@@ -19,7 +27,7 @@ define(
           cache: true
           type: "get"
           data:
-            csrf_token: Utils.get_csrf_token()
+            csrf_token: Common.Utils.get_csrf_token()
           url: "/api/repos/#{@github_user_id}"
           dataType: "json"
         ).done(
@@ -37,7 +45,7 @@ define(
           type: "put"
           url: "/api/repos/#{@github_user_id}"
           data:
-            csrf_token: Utils.get_csrf_token()
+            csrf_token: Common.Utils.get_csrf_token()
           dataType: "json"
         ).done(
           (repos)->

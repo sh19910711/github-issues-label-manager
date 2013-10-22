@@ -1,9 +1,16 @@
 define(
   [
-    "backbone"
     "underscore"
+    "jquery"
+    "backbone"
+    "app/common"
   ]
-  (Backbone, _)->
+  (
+    _
+    $
+    Backbone
+    Common
+  )->
     class IssuesLabelsView extends Backbone.View
       tagName: "table"
       className: "table table-striped"

@@ -1,10 +1,15 @@
 define(
   [
+    "underscore"
     "jquery"
+    "app/common"
   ]
-  ($)->
+  (
+    _
+    $
+    Common
+  )->
     class Utils
-
       @get_csrf_token: ->
         $("meta[data-csrf-token]").data("csrf-token")
 

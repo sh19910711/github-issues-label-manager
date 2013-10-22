@@ -1,22 +1,33 @@
 define(
   [
-    "backbone"
     "underscore"
+    "jquery"
+    "backbone"
+    "app/common"
     "app/label"
     "com/backbone/backbone-fetch-cache"
   ]
-  (Backbone, _, Label)->
+  (
+    _
+    $
+    Backbone
+    Common
+    Label
+  )->
     class Labels extends Backbone.Collection
       model: Label.Models.Label
 
       initialize: (options)->
-        _.bindAll @, 'add_label', 'fetch_labels'
+        _.bindAll(
+          @
+          'add_label'
+          'fetch_labels'
+        )
         @github_user_id = options["github_user_id"]
         @github_repo_name = options["github_repo_name"]
         @url = "/api/issues_label/#{@github_user_id}/#{@github_repo_name}"
         @
 
-    _(Labels::).extend
       add_label: (label_info)=>
         @create(
           {
@@ -31,6 +42,7 @@ define(
               @fetch_labels()
           }
         )
+
       fetch_labels: ()=>
         @fetch(
           cache: true
@@ -41,10 +53,11 @@ define(
         ).done(
           (labels)=>
             _(labels).each(
-              (label)->
+              (label)=>
                 @add label
             )
             @trigger "fetch-end"
         )
+
     Labels
 )

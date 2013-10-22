@@ -5,14 +5,15 @@ define(
     requirejs.config(
       paths:
         # app
-        "app/common":         "/lib/app/js/common"
-        "app/common/utils":         "/lib/app/js/common/utils"
-        "app/application":    "/lib/app/js/application"
-        "app/label":          "/lib/app/js/label"
-        "app/labels":         "/lib/app/js/labels"
-        "app/page":           "/lib/app/js/page"
-        "app/repositories":   "/lib/app/js/repositories"
-        "app/repository":     "/lib/app/js/repository"
+        "app/main": "/lib/app/js/main"
+        "app/application": "/lib/app/js/application"
+        "app/config": "/lib/app/js/config"
+        "app/common": "/lib/app/js/common"
+        "app/repository": "/lib/app/js/repository"
+        "app/repositories": "/lib/app/js/repositories"
+        "app/page": "/lib/app/js/page"
+        "app/labels": "/lib/app/js/labels"
+        "app/label": "/lib/app/js/label"
         # components
         "com/jquery/jquery.pjax":             "/lib/com/jquery-pjax/js/jquery.pjax"
         "com/bootstrap/bootstrap":            "/lib/com/bootstrap/js/bootstrap"

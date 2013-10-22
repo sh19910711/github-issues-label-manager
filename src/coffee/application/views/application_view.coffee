@@ -1,9 +1,16 @@
 define(
   [
-    "backbone"
     "underscore"
+    "jquery"
+    "backbone"
+    "app/common"
   ]
-  (Backbone, _)->
+  (
+    _
+    $
+    Backbone
+    Common
+  )->
     class ApplicationView extends Backbone.View
       el: "#application-view"
       initialize: ->

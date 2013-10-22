@@ -7,14 +7,28 @@ requirejs(
       [
         "jquery"
         "com/bootstrap/bootstrap"
-        "app/application"
         "app/common"
+        "app/application"
       ]
-      ($, dummy1, Application, Common)->
+      ($, dummy1, Common, Application)->
         $(
           ->
-            root = Common.Utils.get_root()
-            root.application = new Application()
+            # app
+            app =
+              router: new Application.Routers.ApplicationRouter()
+
+            # cache
+            Backbone.fetchCache.getCacheKey = (instance, options)->
+              res = instance.constructor.name
+              res += ':' + instance.github_user_id if instance.github_user_id?
+              res += ":" + instance.github_repo_name if instance.github_repo_name?
+              res
+
+            # push state
+            Backbone.history.start(
+              pushState: true
+            )
+
         )
     )
 )

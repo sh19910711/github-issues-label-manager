@@ -1,14 +1,29 @@
 define(
   [
+    "underscore"
+    "jquery"
     "backbone"
+    "app/common"
     "app/labels"
   ]
-  (Backbone, Labels)->
-    class UserRepoPageView extends Backbone.View
+  (
+    _
+    $
+    Backbone
+    Common
+    Labels
+  )->
+    class UserRepoView extends Backbone.View
+      id: "page-view"
       initialize: (options)->
-        _.bindAll @, ["render"]
-        @issues_labels = new IssuesLabels(options.issues_labels)
-        @issues_labels_view = new IssuesLabelsView(
+        _.bindAll(
+          @
+          "render"
+          "event_update_labels"
+          "event_add_label"
+        )
+        @issues_labels = new Labels.Collections.Labels(options.issues_labels)
+        @issues_labels_view = new Labels.Views.LabelsView(
           collection: @issues_labels
         )
 
@@ -18,7 +33,6 @@ define(
 
       render: ()->
         @$el.empty()
-        # @$el.append "<div><button class='update btn btn-primary'>Update Labels</button></div>"
         @$el.append(
           "<div class=\"add form-inline\">" +
           "<div class=\"form-group\">" +
@@ -33,10 +47,10 @@ define(
         @$el.append @issues_labels_view.render().el
         @
 
-      event_update_labels: ()->
+      event_update_labels: ()=>
         @issues_labels_view.collection.fetch_new_labels()
 
-      event_add_label: ()->
+      event_add_label: ()=>
         label_name = $("input#new-label-name").val()
         @issues_labels.add_label.call(
           @issues_labels
@@ -44,4 +58,5 @@ define(
           color: "FF0000"
         )
 
+    UserRepoView
 )

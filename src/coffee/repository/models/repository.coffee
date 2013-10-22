@@ -1,8 +1,16 @@
 define(
   [
+    "underscore"
+    "jquery"
     "backbone"
+    "app/common"
   ]
-  (Backbone)->
+  (
+    _
+    $
+    Backbone
+    Common
+  )->
     class Repository extends Backbone.Model
       defaults:
         full_name: ""

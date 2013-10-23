@@ -12,6 +12,7 @@ define(
     Common
   )->
     class Label extends Backbone.Model
+      urlRoot: "/api/label"
       defaults:
         name: ""
         color:
@@ -20,6 +21,7 @@ define(
           b: 0
 
       initialize: (options)->
+        console.log "@Label::Models::Label#initialize"
         @on "change", =>
           @set "color", @resolve_color_code @get "color"
         @
@@ -64,7 +66,9 @@ define(
           return color_code
 
       set_color: (color_code)=>
-        @set "color", color_code
+        @save(
+          color: color_code
+        )
 
       get_color: =>
         color1 = @get "color"

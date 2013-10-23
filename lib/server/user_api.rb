@@ -81,6 +81,8 @@ module Server
       #
       # Repo Label
       #
+
+      # Create Label
       app.post "/api/label" do
         request.body.rewind
         params_json = JSON.parse request.body.read
@@ -108,6 +110,23 @@ module Server
             :result => "NG",
           }.to_json
         end
+      end
+
+      # Get Label
+      app.get "/api/label/:label_id" do
+        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
+        github_user_id   = matches[1]
+        github_repo_name = matches[2]
+        label_name       = matches[3]
+        repo_labels = Labels.where(
+          :reponame => "#{github_user_id}/#{github_repo_name}",
+        ).cache.first
+        label1 = repo_labels.labels.select{|label| label["name"] == label_name }.first
+        {
+          :id => params["label_id"],
+          :name => label1["name"],
+          :color => label1["color"],
+        }.to_json
       end
 
       # Delete label

@@ -11,6 +11,14 @@ TEST_EYE_GREP_MODE = ENV["TEST_EYE_GREP_MODE"] === "TRUE"
 require "webmock/rspec"
 WebMock.allow_net_connect! if TEST_EYE_GREP_MODE
 
+require "mongoid"
+Mongoid.load!("mongoid.yml", :test)
+
+require "database_cleaner"
+require "factory_girl"
+require "server/models"
+FactoryGirl.find_definitions
+
 Spork.prefork do
   RSpec.configure do |config|
     config.include Rack::Test::Methods
@@ -38,6 +46,26 @@ Spork.prefork do
         )
     end
     config.before { @github = Server::Common::GitHub.new("test-access-token") }
+  end
+
+  RSpec.configure do |config|
+    config.before do
+      FactoryGirl.create :labels
+    end
+    config.after { FactoryGirl.reload }
+  end
+
+  RSpec.configure do |config|
+    config.before :suite do
+      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.clean_with :truncation
+    end
+    config.before :each do
+      DatabaseCleaner.start
+    end
+    config.after :each do
+      DatabaseCleaner.clean
+    end
   end
 
   SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter

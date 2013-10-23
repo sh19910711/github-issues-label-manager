@@ -36,5 +36,7 @@ group :test do
   gem "simplecov-rcov"
   gem "ci_reporter"
   gem "webmock"
+  gem "factory_girl"
+  gem "database_cleaner"
 end
 

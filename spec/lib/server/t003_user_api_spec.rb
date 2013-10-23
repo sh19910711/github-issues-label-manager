@@ -6,13 +6,15 @@ describe "T003: User API" do
   end
 
   describe "001: Label" do
-    it "001: Create" do raise "TODO" end
+    it "001: Create" do
+      puts "Hello create"
+    end
 
     describe "002: Read" do
-      before { get "/api/label/#{CGI.escape("user/repo")}" }
+      before { get "/api/label/#{CGI.escape("user/repo/label1")}" }
+      subject { JSON.parse(last_response.body)["color"] }
       it "002: Read" do
-        puts last_response.body
-        @github.get_user_id.should === "octocat"
+        should eq "EEEEEE"
       end
     end
 

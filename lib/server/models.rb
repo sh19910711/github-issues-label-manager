@@ -1,2 +1,2 @@
 require "server/models/user"
-require "server/models/issues_labels"
+require "server/models/labels"

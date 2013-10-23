@@ -16,6 +16,7 @@ define(
   )->
     class ApplicationRouter extends Backbone.Router
       initialize: (options)->
+        @page_view = undefined
         @container_id = "#container_id"
         @side_id = "#side_id"
         $(document).on(
@@ -59,7 +60,7 @@ define(
 
       show_repo: (github_user_id, github_repo_name)->
         @page_view = new Page.Views.UserRepoView(
-          issues_labels:
+          labels:
             github_user_id: github_user_id
             github_repo_name: github_repo_name
         )
@@ -69,12 +70,9 @@ define(
         $.pjax(
           url: path
           container: "#container"
-        ).done(
+        ).always(
           =>
             $("#page-view").append @page_view.el
-            # set application view
-            if $(@page_view.el).size() > 0
-              @page_view.render()
+            @page_view.render()
         )
-
 )

@@ -2,7 +2,7 @@ require "server/common"
 
 module Server
   module Models
-    class IssuesLabels
+    class Labels
       include Server::Common
       include Mongoid::Document
 
@@ -28,6 +28,14 @@ module Server
         ).cache.first
         return update_by_reponame(github_access_token, github_reponame) if res.nil?
         res
+      end
+
+      def self.delete_label! github_access_token, github_reponame, label_name
+        res = where(
+          :reponame => github_reponame,
+        ).destroy
+        github = GitHub.new github_access_token
+        github.delete_label! github_reponame, label_name
       end
     end
   end

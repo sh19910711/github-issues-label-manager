@@ -5,7 +5,6 @@ define(
     "backbone"
     "app/common"
     "app/label"
-    "com/backbone/backbone-fetch-cache"
   ]
   (
     _
@@ -16,48 +15,25 @@ define(
   )->
     class Labels extends Backbone.Collection
       model: Label.Models.Label
+      url: =>
+        "/api/labels/#{@github_user_id}/#{@github_repo_name}"
 
-      initialize: (options)->
-        _.bindAll(
-          @
-          'add_label'
-          'fetch_labels'
-        )
+      initialize: (models, options)->
         @github_user_id = options["github_user_id"]
         @github_repo_name = options["github_repo_name"]
-        @url = "/api/issues_label/#{@github_user_id}/#{@github_repo_name}"
         @
 
       add_label: (label_info)=>
-        @create(
+        new_label = @create(
           {
-            label_name: label_info.name
-            label_color: label_info.color
+            github_user_id: @github_user_id
+            github_repo_name: @github_repo_name
+            name: label_info.name
+            color: label_info.color
             csrf_token: Common.Utils.get_csrf_token()
           }
-          {
-            success: ()=>
-              key = Backbone.fetchCache.getCacheKey(@)
-              Backbone.fetchCache.clearItem key
-              @fetch_labels()
-          }
         )
-
-      fetch_labels: ()=>
-        @fetch(
-          cache: true
-          data:
-            csrf_token: Common.Utils.get_csrf_token()
-          url: "/api/issues_labels/#{@github_user_id}/#{@github_repo_name}"
-          dataType: "json"
-        ).done(
-          (labels)=>
-            _(labels).each(
-              (label)=>
-                @add label
-            )
-            @trigger "fetch-end"
-        )
+        new_label.set "id", "#{@github_user_id}/#{@github_repo_name}/#{label_info.name}"
 
     Labels
 )

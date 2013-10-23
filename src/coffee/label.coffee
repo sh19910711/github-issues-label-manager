@@ -1,8 +1,10 @@
 define(
   [
     "./label/models"
+    "./label/views"
   ]
-  (Models)->
+  (Models, Views)->
     class Label
       @Models: Models
+      @Views: Views
 )

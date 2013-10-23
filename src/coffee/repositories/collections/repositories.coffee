@@ -17,7 +17,7 @@ define(
     class Repositories extends Backbone.Collection
       model: Repository.Models.Repository
 
-      initialize: (options)->
+      initialize: (models, options)->
         @github_user_id = options["github_user_id"]
         @
 

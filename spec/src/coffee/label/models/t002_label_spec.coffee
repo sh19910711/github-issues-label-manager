@@ -148,7 +148,7 @@ describe "T002: Label", ->
           ()=>
             setTimeout(
               ()=>
-                label1.get_color().should.equal "#FF0000"
+                label1.get_color().should.equal "FF0000"
                 done()
               100
             )
@@ -170,7 +170,7 @@ describe "T002: Label", ->
             success: =>
               setTimeout(
                 =>
-                  label1.get_color().should.equal "#FF0000"
+                  label1.get_color().should.equal "FF0000"
                   @spy.calledWith("sync").should.equal true
                   done()
                 0
@@ -190,7 +190,7 @@ describe "T002: Label", ->
             success: =>
               setTimeout(
                 =>
-                  label1.get_color().should.equal "#FF0000"
+                  label1.get_color().should.equal "FF0000"
                   @spy.calledWith("sync").should.equal true
                   done()
                 0
@@ -229,7 +229,7 @@ describe "T002: Label", ->
             success: =>
               setTimeout(
                 =>
-                  label1.get_color().should.equal "#FF0000"
+                  label1.get_color().should.equal "FF0000"
                   @spy.calledWith("sync").should.equal true
                   done()
                 0
@@ -249,7 +249,7 @@ describe "T002: Label", ->
             success: =>
               setTimeout(
                 =>
-                  label1.get_color().should.equal "#FF0000"
+                  label1.get_color().should.equal "FF0000"
                   @spy.calledWith("sync").should.equal true
                   done()
                 0

@@ -14,14 +14,14 @@ define(
     Repositories
   )->
     class UserReposView extends Backbone.View
-      id: "page-view"
+      tagName: "div"
 
       events:
         "click button#update_user_repos": "update_user_repos"
 
       initialize: (options)->
         _.bindAll @, "render"
-        @repositories = new Repositories.Collections.Repositories(options.repositories)
+        @repositories = new Repositories.Collections.Repositories([], options.repositories)
         @repositories_view = new Repositories.Views.RepositoriesView(
           collection: @repositories
         )

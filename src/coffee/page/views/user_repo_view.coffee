@@ -5,6 +5,7 @@ define(
     "backbone"
     "app/common"
     "app/labels"
+    "com/backbone/backbone-fetch-cache"
   ]
   (
     _
@@ -14,7 +15,8 @@ define(
     Labels
   )->
     class UserRepoView extends Backbone.View
-      id: "page-view"
+      tagName: "div"
+
       initialize: (options)->
         _.bindAll(
           @
@@ -22,9 +24,12 @@ define(
           "event_update_labels"
           "event_add_label"
         )
-        @issues_labels = new Labels.Collections.Labels(options.issues_labels)
-        @issues_labels_view = new Labels.Views.LabelsView(
-          collection: @issues_labels
+        @labels = new Labels.Collections.Labels([], options.labels)
+        @labels_view = new Labels.Views.LabelsView(
+          collection: @labels
+        )
+        @labels.fetch(
+          cache: true
         )
 
       events: ()->
@@ -32,7 +37,6 @@ define(
         "click .add button": "event_add_label"
 
       render: ()->
-        @$el.empty()
         @$el.append(
           "<div class=\"add form-inline\">" +
           "<div class=\"form-group\">" +
@@ -44,18 +48,17 @@ define(
         )
         @$el.append "<hr>"
         @$el.append "<h3>Issues Labels</h3>"
-        @$el.append @issues_labels_view.render().el
+        @$el.append @labels_view.render().el
         @
 
       event_update_labels: ()=>
-        @issues_labels_view.collection.fetch_new_labels()
+        @labels_view.collection.fetch_new_labels()
 
       event_add_label: ()=>
         label_name = $("input#new-label-name").val()
-        @issues_labels.add_label.call(
-          @issues_labels
+        @labels.add_label(
           name: label_name
-          color: "FF0000"
+          color: "#FF0000"
         )
 
     UserRepoView

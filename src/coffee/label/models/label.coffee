@@ -15,10 +15,7 @@ define(
       urlRoot: "/api/label"
       defaults:
         name: ""
-        color:
-          r: 0
-          g: 0
-          b: 0
+        color: "#333333"
 
       initialize: (options)->
         @set "color", @resolve_color_code @get "color"
@@ -26,6 +23,9 @@ define(
           @set "color", @resolve_color_code @get "color"
         @on "sync", =>
         @
+
+      get_view_id: =>
+        "label-view-#{@get("id").replace(/\//g, "-")}"
 
       validate: ->
         color1 = @get "color"
@@ -36,6 +36,7 @@ define(
         obj = color_code
         if typeof color_code == "string"
           color_code = $.trim color_code
+          color_code = color_code.toUpperCase()
           if !! color_code.match /^#[0-9A-F]{6}$/
             matches = color_code.match /#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})/
             obj = {

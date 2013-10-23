@@ -1,8 +1,10 @@
 define(
   [
     "./common/utils"
+    "com/sprintf/sprintf"
   ]
-  (Utils)->
+  (Utils, sprintf)->
     class Common
       @Utils: Utils
+      @sprintf: sprintf
 )

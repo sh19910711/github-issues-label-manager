@@ -27,6 +27,7 @@ requirejs.config(
     "com/jquery/jquery.pjax":             "lib/com/jquery-pjax/js/jquery.pjax"
     "com/bootstrap/bootstrap":            "lib/com/bootstrap/js/bootstrap"
     "com/backbone/backbone-fetch-cache":  "lib/com/backbone-fetch-cache/js/backbone.fetch-cache"
+    "com/sprintf/sprintf":                "lib/com/sprintf/js/sprintf"
   shim:
     "com/jquery/jquery.pjax":
       exports: "jQuery.fn.pjax"
@@ -43,5 +44,7 @@ requirejs.config(
       deps: [
         "backbone"
       ]
+    "com/sprintf/sprintf":
+      exports: "window.sprintf"
 )
 

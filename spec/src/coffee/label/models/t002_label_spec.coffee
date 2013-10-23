@@ -146,9 +146,9 @@ describe "T002: Label", ->
         label1.url = @label_url
         label1.on "sync", =>
           @spy "sync"
+        label1.set_color "#FF0000"
         label1.save(
           {
-            color: "#FF0000"
           }
           {
             success: =>
@@ -162,18 +162,18 @@ describe "T002: Label", ->
           }
         )
 
-      it "002: validation: {r: 255, g: 0, b: 0}", ->
+      it "002: validation: {r: 255, g: 0, b: 0}", (done)->
         label1 = new @Label()
         label1.url = @label_url
         label1.on "sync", =>
           @spy "sync"
+        label1.set_color(
+          r: 255
+          g: 0
+          b: 0
+        )
         label1.save(
           {
-            color: {
-              r: 255
-              g: 0
-              b: 0
-            }
           }
           {
             success: =>
@@ -187,8 +187,9 @@ describe "T002: Label", ->
           }
         )
 
-      it "003: validation: FF0000 -> #FF0000", ->
+      it "003: validation: FF0000 -> #FF0000", (done)->
         label1 = new @Label()
+        label1.url = @label_url
         label1.on "sync", =>
           @spy "sync"
         label1.save(
@@ -207,7 +208,7 @@ describe "T002: Label", ->
           }
         )
 
-      it "004: invalidation: FF00000", ->
+      it "004: invalidation: FF00000", (done)->
         label1 = new @Label()
         label1.url = @label_url
         label1.on "sync", =>
@@ -215,23 +216,19 @@ describe "T002: Label", ->
         label1.on "invalid", =>
           @spy "invalid"
         label1.save(
-          {
-            color: "FF00000"
-          }
-          {
-            success: =>
-              setTimeout(
-                =>
-                  label1.get_color().should.equal "#FF0000"
-                  @spy.calledWith("sync").should.equal false
-                  @spy.calledWith("invalid").should.equal true
-                  done()
-                0
-              )
-          }
+          color: "FF00000"
+        ).always(
+          ()=>
+            setTimeout(
+              =>
+                @spy.calledWith("sync").should.equal false
+                @spy.calledWith("invalid").should.equal true
+                done()
+              0
+            )
         )
 
-      it "005: validation: F00 -> #FF0000", ->
+      it "005: validation: F00 -> #FF0000", (done)->
         label1 = new @Label()
         label1.url = @label_url
         label1.on "sync", =>
@@ -252,7 +249,7 @@ describe "T002: Label", ->
           }
         )
 
-      it "006: validation: #F00 -> #FF0000", ->
+      it "006: validation: #F00 -> #FF0000", (done)->
         label1 = new @Label()
         label1.url = @label_url
         label1.on "sync", =>

@@ -18,7 +18,8 @@
     "requirejs": "~2.1.9",
     "backbone": "~1.1.0",
     "underscore": "~1.5.2",
-    "backbone-fetch-cache": "~1.1.2"
+    "backbone-fetch-cache": "~1.1.2",
+    "sprintf": "*"
   },
   "exportsOverride": {
     "bootstrap": {
@@ -46,6 +47,9 @@
     },
     "underscore": {
       "js": "underscore.js"
+    },
+    "sprintf": {
+      "js": "src/sprintf.js"
     }
   }
 }

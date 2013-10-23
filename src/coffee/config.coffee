@@ -18,6 +18,7 @@ define(
         "com/jquery/jquery.pjax":             "/lib/com/jquery-pjax/js/jquery.pjax"
         "com/bootstrap/bootstrap":            "/lib/com/bootstrap/js/bootstrap"
         "com/backbone/backbone-fetch-cache":  "/lib/com/backbone-fetch-cache/js/backbone.fetch-cache"
+        "com/sprintf/sprintf":                "/lib/com/sprintf/js/sprintf"
         # generals
         "jquery":       "/lib/com/jquery/js/jquery"
         "underscore":   "/lib/com/underscore/js/underscore"
@@ -38,6 +39,8 @@ define(
           deps: [
             "backbone"
           ]
+        "com/sprintf/sprintf":
+          exports: "sprintf"
         # generals
         "backbone":
           exports: "Backbone"

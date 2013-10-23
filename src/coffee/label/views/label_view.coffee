@@ -23,7 +23,7 @@ define(
             @$el.remove()
         )
       render: ()=>
-        @$el.append "<td>#{@model.get("name")}</td><td><button class=\"remove btn btn-danger\">remove</button></td>"
+        @$el.append "<td style=\"border-left: 3px solid ##{@model.get("color") || "333"}\" class=\"label-view\">#{@model.get("name")}</td><td class=\"text-right\"><button class=\"remove btn btn-xs btn-danger\">remove</button></td>"
         @
       remove_label: ()=>
         @model.destroy(

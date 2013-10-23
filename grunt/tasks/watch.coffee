@@ -10,11 +10,14 @@ module.exports = (grunt)->
           './lib/server/static/lib/app/**/'
           './src/coffee/**/'
           './spec/src/coffee/**/'
+          './src/scss/**/'
         ]
         livereload:
           enabled: true
           port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
           extensions: ['js', 'css']
+      'scss': (path) =>
+        ["compass:build"]
       'coffee': (path) =>
         if path.match(/^spec\/src\/coffee\//)
           ['test']

@@ -13,7 +13,7 @@ define(
   )->
     class RepositoriesView extends Backbone.View
       tagName: "table"
-      className: "table table-striped"
+      className: "table table-striped table-left-border table-hover"
 
       initialize: (options)->
         _.bindAll @, ["render"]

@@ -15,7 +15,7 @@ define(
   )->
     class LabelsView extends Backbone.View
       tagName: "table"
-      className: "table table-striped"
+      className: "table table-striped table-hover"
 
       initialize: (options)->
         _.bindAll @, ["render"]

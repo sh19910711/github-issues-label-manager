@@ -36,7 +36,10 @@ define(
           "</button>"
         )
         @$el.append "<hr>"
-        @$el.append @repositories_view.render().el
+        @$el.append =>
+          wrapper = $("<div class=\"well\"></div>")
+          wrapper.append @repositories_view.render().el
+          wrapper
         @
 
     UserReposView

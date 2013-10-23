@@ -72,7 +72,8 @@ define(
           container: "#container"
         ).always(
           =>
-            $("#page-view").append @page_view.el
-            @page_view.render()
+            if @page_view?
+              $("#page-view").append @page_view.el 
+              @page_view.render()
         )
 )

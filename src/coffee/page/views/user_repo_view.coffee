@@ -48,7 +48,10 @@ define(
         )
         @$el.append "<hr>"
         @$el.append "<h3>Issues Labels</h3>"
-        @$el.append @labels_view.render().el
+        @$el.append =>
+          wrapper = $("<div class=\"well\"></div>")
+          wrapper.append @labels_view.render().el
+          wrapper
         @
 
       event_update_labels: ()=>

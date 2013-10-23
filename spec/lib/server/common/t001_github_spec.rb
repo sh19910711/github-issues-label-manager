@@ -7,32 +7,27 @@ describe "T001" do
   end
   describe "001: ユーザー" do
     it "001: ユーザーIDが意図したものになっているか" do
-      return unless TEST_EYE_GREP_MODE
-      puts @client.get_user_id
+      puts @client.get_user_id if TEST_EYE_GREP_MODE
     end
   end
   describe "002: リポジトリ" do
     it "001: 意図しないリポジトリが取得漏れしていないか" do
-      return unless TEST_EYE_GREP_MODE
-      p @client.get_repos
+      p @client.get_repos if TEST_EYE_GREP_MODE
     end
   end
   describe "003: Issues" do
     it "001: 指定したリポジトリのIssuesが取得できているか" do
-      return unless TEST_EYE_GREP_MODE
-      p @client.get_repo_issues "js2ch"
+      p @client.get_repo_issues "js2ch" if TEST_EYE_GREP_MODE
     end
   end
   describe "004: label" do
     it "001: 指定したリポジトリのIssuesのラベルが取得できているか" do
-      return unless TEST_EYE_GREP_MODE
-      p @client.get_repo_issues_label "js2ch"
+      p @client.get_repo_issues_label "js2ch" if TEST_EYE_GREP_MODE
     end
   end
   describe "005: API Limit" do
     it "001: 残り回数の確認" do
-      return unless TEST_EYE_GREP_MODE
-      p @client.get_api_limit
+      p @client.get_api_limit if TEST_EYE_GREP_MODE
     end
   end
 end

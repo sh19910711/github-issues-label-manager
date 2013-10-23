@@ -45,6 +45,7 @@ define(
           exports: "Backbone"
           deps: [
             "underscore"
+            "jquery"
           ]
         "underscore":
           exports: "_"

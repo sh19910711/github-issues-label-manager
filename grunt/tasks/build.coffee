@@ -88,6 +88,15 @@ module.exports = (grunt)->
             "com/bootstrap/bootstrap":            "empty:"
             "com/backbone/backbone-fetch-cache":  "empty:"
             "com/sprintf/sprintf":                "empty:"
+
+  # compass
+  _(init_config).extend
+    compass:
+      "build":
+        options:
+          outputStyle: "compressed"
+          sassDir: "src/scss"
+          cssDir: "lib/server/static/lib/app/css"
  
   # apply config
   grunt.initConfig init_config
@@ -102,6 +111,7 @@ module.exports = (grunt)->
     "build"
     [
       "clean:build"
+      "compass:build"
       "bower:build"
       "coffee:build"
       "requirejs:build"

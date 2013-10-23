@@ -7,11 +7,12 @@
       %meta{"data-login-user-github-user-id" => login_user.github_user_id}
     %title GitHub Issues Label Manager
     %link{:rel => "stylesheet", :href => "/lib/com/bootstrap/css/bootstrap.css"}
+    %link{:rel => "stylesheet", :href => "/lib/app/css/main.css"}
     %script{:src => "/lib/com/requirejs/js/require.js", "data-main" => "/lib/app/js/main"}
     = livereload_tag
   %body
     %div#wrapper.container
-      %div#header.container
+      %div#header.row
         %h1 GitHub Issues Label Manager
       %div#contents.row
         %div#side.col-xs-4

@@ -16,7 +16,8 @@ module.exports = (grunt)->
     mochaTest:
       spec:
         options:
-          reporter: "tap"
+          reporter: "spec"
+          colors: false
           require: mocha_requires
         src: [
           "./spec/src/coffee/**/*_spec.coffee"

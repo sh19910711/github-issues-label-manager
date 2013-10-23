@@ -1,23 +1,37 @@
+requirejs.config(
+  baseUrl: "/lib"
+)
 requirejs(
   [
-    "./config"
+    "app/js/config"
   ]
   ->
     requirejs(
       [
         "jquery"
         "com/bootstrap/bootstrap"
+        "app/common"
         "app/application"
-        "app/utils"
       ]
-      ($, dummy1, Application, Utils)->
+      ($, dummy1, Common, Application)->
         $(
           ->
-            root = Utils.get_root()
-            root.application = new Application(
-              side_id: "#side"
-              container_id: "#container"
+            # app
+            app =
+              router: new Application.Routers.ApplicationRouter()
+
+            # cache
+            Backbone.fetchCache.getCacheKey = (instance, options)->
+              res = instance.constructor.name
+              res += ':' + instance.github_user_id if instance.github_user_id?
+              res += ":" + instance.github_repo_name if instance.github_repo_name?
+              res
+
+            # push state
+            Backbone.history.start(
+              pushState: true
             )
+
         )
     )
 )

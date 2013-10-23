@@ -42,7 +42,10 @@ module Server
 
       # Csrf
       app.set :csrf_settings, {
-        :skip => ["POST:/api/issues_label/.*"]
+        :skip => [
+          "POST:/api/label",
+          "DELETE:/api/label/.*",
+        ]
       }
 
       app.helpers Server::Common::Helpers

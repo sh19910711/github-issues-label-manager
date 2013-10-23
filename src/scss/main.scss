@@ -1,0 +1,13 @@
+@import "compass/css3";
+@import "compass/css3/user-interface";
+
+body {
+  background: rgba(224, 224, 224, 1);
+  color: rgba(62, 62, 62, 1);
+  overflow-y: scroll;
+}
+
+.table-left-border {
+  border-left: 3px solid rgba(62, 62, 62, 0.5);
+}
+

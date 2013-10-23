@@ -4,25 +4,24 @@ define(
   ()->
     requirejs.config(
       paths:
-        "app/application/router":             "/lib/app/js/application/router"
-        "app/application":                    "/lib/app/js/application"
-        "app/views/application":              "/lib/app/js/views/application"
-        "app/views/repositories":             "/lib/app/js/views/repositories"
-        "app/views/user_repos_page":          "/lib/app/js/views/user_repos_page"
-        "app/views/user_repo_page":           "/lib/app/js/views/user_repo_page"
-        "app/views/issues_labels":            "/lib/app/js/views/issues_labels"
-        "app/models/repository":              "/lib/app/js/models/repository"
-        "app/models/issues_label":            "/lib/app/js/models/issues_label"
-        "app/collections/repositories":       "/lib/app/js/collections/repositories"
-        "app/collections/issues_labels":      "/lib/app/js/collections/issues_labels"
-        "app/utils":                          "/lib/app/js/utils"
-        "com/jquery/jquery.pjax":             "/lib/com/jquery-pjax/js/jquery.pjax"
-        "com/bootstrap/bootstrap":            "/lib/com/bootstrap/js/bootstrap"
-        "com/backbone/backbone-fetch-cache":  "/lib/com/backbone-fetch-cache/js/backbone.fetch-cache"
+        # app
+        "app/main": "app/js/main"
+        "app/application": "app/js/application"
+        "app/common": "app/js/common"
+        "app/repository": "app/js/repository"
+        "app/repositories": "app/js/repositories"
+        "app/page": "app/js/page"
+        "app/labels": "app/js/labels"
+        "app/label": "app/js/label"
+        # components
+        "com/jquery/jquery.pjax":             "com/jquery-pjax/js/jquery.pjax"
+        "com/bootstrap/bootstrap":            "com/bootstrap/js/bootstrap"
+        "com/backbone/backbone-fetch-cache":  "com/backbone-fetch-cache/js/backbone.fetch-cache"
+        "com/sprintf/sprintf":                "com/sprintf/js/sprintf"
         # generals
-        "jquery":       "/lib/com/jquery/js/jquery"
-        "underscore":   "/lib/com/underscore/js/underscore"
-        "backbone":     "/lib/com/backbone/js/backbone-min"
+        "jquery":       "com/jquery/js/jquery"
+        "underscore":   "com/underscore/js/underscore"
+        "backbone":     "com/backbone/js/backbone-min"
       shim:
         "com/jquery/jquery.pjax":
           exports: "jQuery.fn.pjax"
@@ -39,6 +38,8 @@ define(
           deps: [
             "backbone"
           ]
+        "com/sprintf/sprintf":
+          exports: "sprintf"
         # generals
         "backbone":
           exports: "Backbone"

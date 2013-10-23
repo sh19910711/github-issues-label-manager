@@ -7,4 +7,5 @@ require "rake/clean"
 CLEAN << ".yardoc"
 
 require "rake/yard/routes"
+require "rake/requirejs/paths"
 

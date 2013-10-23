@@ -2,7 +2,8 @@
 /node_modules
 /bower_components
 /.sass-cache
-/lib/server/static/lib/app/js/application/
+/spec/reports
+/lib/server/static/lib/app/js/application
 /lib/server/static/lib/app/js/application.js
 /lib/server/static/lib/app/js/common.js
 /lib/server/static/lib/app/js/common

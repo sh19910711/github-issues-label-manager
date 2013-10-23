@@ -27,7 +27,10 @@ module.exports = (grunt)->
             ext: ".js"
           ]
           grunt.config ['coffee', 'update', 'files'], files
-          ['coffee:update']
+          [
+            'coffee:update'
+            'requirejs:build'
+          ]
         else
           []
 

@@ -5,24 +5,23 @@ define(
     requirejs.config(
       paths:
         # app
-        "app/main": "/lib/app/js/main"
-        "app/application": "/lib/app/js/application"
-        "app/config": "/lib/app/js/config"
-        "app/common": "/lib/app/js/common"
-        "app/repository": "/lib/app/js/repository"
-        "app/repositories": "/lib/app/js/repositories"
-        "app/page": "/lib/app/js/page"
-        "app/labels": "/lib/app/js/labels"
-        "app/label": "/lib/app/js/label"
+        "app/main": "app/js/main"
+        "app/application": "app/js/application"
+        "app/common": "app/js/common"
+        "app/repository": "app/js/repository"
+        "app/repositories": "app/js/repositories"
+        "app/page": "app/js/page"
+        "app/labels": "app/js/labels"
+        "app/label": "app/js/label"
         # components
-        "com/jquery/jquery.pjax":             "/lib/com/jquery-pjax/js/jquery.pjax"
-        "com/bootstrap/bootstrap":            "/lib/com/bootstrap/js/bootstrap"
-        "com/backbone/backbone-fetch-cache":  "/lib/com/backbone-fetch-cache/js/backbone.fetch-cache"
-        "com/sprintf/sprintf":                "/lib/com/sprintf/js/sprintf"
+        "com/jquery/jquery.pjax":             "com/jquery-pjax/js/jquery.pjax"
+        "com/bootstrap/bootstrap":            "com/bootstrap/js/bootstrap"
+        "com/backbone/backbone-fetch-cache":  "com/backbone-fetch-cache/js/backbone.fetch-cache"
+        "com/sprintf/sprintf":                "com/sprintf/js/sprintf"
         # generals
-        "jquery":       "/lib/com/jquery/js/jquery"
-        "underscore":   "/lib/com/underscore/js/underscore"
-        "backbone":     "/lib/com/backbone/js/backbone-min"
+        "jquery":       "com/jquery/js/jquery"
+        "underscore":   "com/underscore/js/underscore"
+        "backbone":     "com/backbone/js/backbone-min"
       shim:
         "com/jquery/jquery.pjax":
           exports: "jQuery.fn.pjax"

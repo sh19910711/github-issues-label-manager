@@ -1,6 +1,9 @@
+requirejs.config(
+  baseUrl: "/lib"
+)
 requirejs(
   [
-    "./config"
+    "app/js/config"
   ]
   ->
     requirejs(

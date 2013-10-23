@@ -66,7 +66,6 @@ define(
         @load_contents "/repos/#{github_user_id}/#{github_repo_name}"
 
       load_contents: (path)->
-        console.log "@load_contents"
         $.pjax(
           url: path
           container: "#container"

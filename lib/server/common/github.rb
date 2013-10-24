@@ -32,8 +32,6 @@ module Server
         selected_2 = get_repos.select {|cand|
           cand[:full_name].end_with? "/#{reponame}"
         }
-        p selected_2
-        p reponame
         abort "error" if selected_2.length != 1
         selected_2[0][:full_name]
       end

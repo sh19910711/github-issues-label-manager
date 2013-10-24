@@ -29,30 +29,120 @@ Spork.prefork do
   end
 
   RSpec.configure do |config|
-    config.before do
-      body = readmock "api.github.com/user/octocat.json"
+    config.before :each do
       stub_request(
-        :get,
-        "https://api.github.com/user",
-      ).to_return(
+        :any,
+        /.*/,
+      )
+      .to_return do |req|
+        puts "unknown req: ", req
+      end
+    end
+
+    config.before :each do
+      stub_request(
+        :post,
+        /repos\/octocat\/gh-repo\/labels$/,
+      )
+      .to_return do |req|
+        params = JSON.parse req.body
+        labels = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo"
+        ).first
+        # create new label
+        labels.labels.push(
+          {
+            "name" => params["name"],
+            "color" => params["color"],
+          }
+        )
+        labels.save
+        # send response
+        body = {
+          "name" => params["name"],
+          "color" => params["color"],
+        }.to_json
         {
           :status   => 200,
-          :headers  => {
-            "Content-Length" => body.length,
-            "Content-Type"   => "application/json"
-          },
           :body     => body,
-        },
-        )
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
     end
+
+    config.before :each do
+      stub_request(
+        :get,
+        /repos\/octocat\/gh-repo\/labels$/,
+      )
+      .to_return do |req|
+        body = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo"
+        ).first.labels.to_json
+        {
+          :status   => 200,
+          :body     => body,
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
+    end
+
+    config.before :each do
+      stub_request(
+        :get,
+        /user$/,
+      )
+      .to_return do |req|
+        body = readmock "api.github.com/user/octocat.json"
+        {
+          :status   => 200,
+          :body     => body,
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
+    end
+
+    config.before :each do
+      stub_request(
+        :get,
+        /users\/octocat\/repos$/,
+      )
+      .to_return do |req|
+        body = readmock "api.github.com/users/octocat/repos.json"
+        {
+          :status   => 200,
+          :body     => body,
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
+    end
+
+    # client
     config.before { @github = Server::Common::GitHub.new("test-access-token") }
   end
 
   RSpec.configure do |config|
     config.before do
       FactoryGirl.create :labels
+      FactoryGirl.create :octocat_labels
+      FactoryGirl.create :user
     end
     config.after { FactoryGirl.reload }
+  end
+
+  RSpec.configure do |config|
+    config.before :each do
+      require "rack/csrf"
+      Rack::Csrf.stub(:csrf_token).and_return("this is token")
+    end
   end
 
   RSpec.configure do |config|
@@ -65,6 +155,19 @@ Spork.prefork do
     end
     config.after :each do
       DatabaseCleaner.clean
+    end
+  end
+
+  # Fake Session
+  RSpec.configure do |config|
+    config.before do
+      session = FakeSessionHash.new
+      session[:login] = {
+        :ip => "127.0.0.1",
+        :github_user_id => "octocat",
+        :github_access_token => "ghtoken",
+      }
+      Rack::Session::Abstract::SessionHash.stub(:new).and_return session
     end
   end
 
@@ -84,6 +187,15 @@ Spork.each_run do
 end
 
 require "server/app"
+
+class FakeSessionHash < Hash
+  def id
+    ""
+  end
+  def options
+    {}
+  end
+end
 
 def source_env path
   File.readlines(path).each do |line|

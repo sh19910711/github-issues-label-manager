@@ -2,20 +2,30 @@ require "spec_helper"
 
 describe "T003: User API" do
   def app
-    Server::App
+    Server::App.new
   end
 
   describe "001: Label" do
     describe "001: Create" do
       before {
-        @env = {
-          "rack.session" => {}
-        }
-        Rack::Csrf.new @env
-        post "/api/label"
+        post(
+          "/api/label",
+          {
+            "csrf_token" => "this is token",
+            "github_user_id" => "octocat",
+            "github_repo_name" => "gh-repo",
+            "name" => "new-label1",
+            "color" => "ffffff",
+          }.to_json,
+          {},
+        )
       }
       it "001: Create" do
-        p last_request.env['rack.session']
+        JSON.parse(last_response.body)["result"].should eq "OK"
+        new_label = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo",
+        ).first.labels.select {|label| label["name"] == "new-label1"}.first
+        new_label["color"].should eq "ffffff"
       end
     end
 

@@ -69,7 +69,11 @@ module Server
       end
 
       def delete_label! reponame, label_name
-        @client.delete_label! reponame, label_name
+        @client.delete_label! resolve_reponame(reponame), label_name
+      end
+
+      def update_label reponame, label_name, label_info
+        @client.update_label resolve_reponame(reponame), label_name, label_info
       end
     end
   end

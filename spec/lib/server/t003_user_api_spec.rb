@@ -38,25 +38,30 @@ describe "T003: User API" do
     end
 
     describe "003: Update" do
-      before {
+      before do
         put(
-          "/api/label/#{CGI.escape("user/repo/label1")}",
+          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
           {
             "csrf_token" => "this is token",
             "github_user_id" => "octocat",
             "github_repo_name" => "gh-repo",
-            "name" => "new-name1",
+            "name" => "new-label1",
             "color" => "C0FFEE",
           }.to_json,
           {},
         )
-      }
+      end
       it "001: Check Updated" do
         labels = Server::Models::Labels.where(
           :reponame => "octocat/gh-repo"
-        )
-        labels.labels.count({|label| label["name"] == "label1"}).should eq 0
-        labels.labels.count({|label| label["name"] == "new-label1"}).should eq 1
+        ).first
+        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
+        labels.labels.count {|label| label["name"] == "new-label1"}.should eq 1
+        labels.labels.each {|label|
+          if label["name"] == "new-label1"
+            label["color"].should eq "C0FFEE"
+          end
+        }
       end
     end
 

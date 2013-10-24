@@ -29,6 +29,7 @@ Spork.prefork do
   end
 
   RSpec.configure do |config|
+    # unknown
     config.before :each do
       stub_request(
         :any,
@@ -39,6 +40,7 @@ Spork.prefork do
       end
     end
 
+    # create new label
     config.before :each do
       stub_request(
         :post,
@@ -72,6 +74,41 @@ Spork.prefork do
       end
     end
 
+    # update label
+    config.before :each do
+      stub_request(
+        :patch,
+        /repos\/octocat\/gh-repo\/labels\/label1$/,
+      )
+      .to_return do |req|
+        params = JSON.parse req.body
+        labels = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo"
+        ).first
+        labels.labels.map {|label|
+          if label["name"] == params["name"]
+            label["name"] = params["name"]
+            label["color"] = params["color"]
+          end
+          label
+        }
+        labels.save
+        # send response
+        body = {
+          "name" => params["name"],
+          "color" => params["color"],
+        }.to_json
+        {
+          :status   => 200,
+          :body     => body,
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
+    end
+
+    # get labels
     config.before :each do
       stub_request(
         :get,
@@ -91,6 +128,7 @@ Spork.prefork do
       end
     end
 
+    # get user info
     config.before :each do
       stub_request(
         :get,
@@ -108,6 +146,7 @@ Spork.prefork do
       end
     end
 
+    # get user repositories
     config.before :each do
       stub_request(
         :get,

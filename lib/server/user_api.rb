@@ -112,6 +112,54 @@ module Server
         end
       end
 
+      # Update Label
+      app.put "/api/label/:label_id" do
+        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
+        github_user_id   = matches[1]
+        github_repo_name = matches[2]
+        label_name       = matches[3]
+        request.body.rewind
+        params_json = JSON.parse request.body.read
+        params[:csrf_token] = params_json["csrf_token"]
+        require_get_csrf do
+          require_login do
+            label_info = {
+              :name => params_json["name"],
+              :color => params_json["color"],
+            }
+            # change github data
+            github = GitHub.new login_user.github_access_token
+            github.update_label(
+              "#{params_json["github_user_id"]}/#{params_json["github_repo_name"]}",
+              label_name,
+              {
+                :name => params_json["name"],
+                :color => params_json["color"],
+              },
+            )
+            # change model data
+            repo_labels = Labels.where(
+              :reponame => "#{github_user_id}/#{github_repo_name}",
+            ).first
+            repo_labels.labels.map {|label|
+              if label["name"] == label_name
+                label["name"] = params_json["name"]
+                label["color"] = params_json["color"]
+              end
+              label
+            }
+            repo_labels.save
+            # send result
+            return {
+              :result => "OK",
+            }.to_json
+          end
+        end
+        return {
+          :result => "NG",
+        }.to_json
+      end
+
       # Get Label
       app.get "/api/label/:label_id" do
         matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/

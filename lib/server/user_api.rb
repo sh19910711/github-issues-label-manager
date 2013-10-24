@@ -123,19 +123,19 @@ module Server
         params[:csrf_token] = params_json["csrf_token"]
         require_get_csrf do
           require_login do
-            label_info = {
-              :name => params_json["name"],
-              :color => params_json["color"],
-            }
+            label_info = {}
+            if params_json["name"]
+              label_info[:name] = params_json["name"]
+            end
+            if params_json["color"]
+              label_info[:name] = params_json["color"]
+            end
             # change github data
             github = GitHub.new login_user.github_access_token
             github.update_label(
               "#{github_user_id}/#{github_repo_name}",
               label_name,
-              {
-                :name => params_json["name"],
-                :color => params_json["color"],
-              },
+              label_info,
             )
             # change model data
             repo_labels = Labels.where(
@@ -143,8 +143,8 @@ module Server
             ).first
             repo_labels.labels.map {|label|
               if label["name"] == label_name
-                label["name"] = params_json["name"]
-                label["color"] = params_json["color"]
+                label["name"] = params_json["name"] if params_json["name"]
+                label["color"] = params_json["color"] if params_json["color"]
               end
               label
             }

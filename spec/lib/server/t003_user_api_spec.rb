@@ -43,8 +43,6 @@ describe "T003: User API" do
           "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
           {
             "csrf_token" => "this is token",
-            "github_user_id" => "octocat",
-            "github_repo_name" => "gh-repo",
             "name" => "new-label1",
             "color" => "C0FFEE",
           }.to_json,
@@ -65,6 +63,22 @@ describe "T003: User API" do
       end
     end
 
-    it "004: Delete" do raise "TODO" end
+    describe "004: Delete" do
+      before do
+        delete(
+          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
+          {
+            "csrf_token" => "this is token",
+          }.to_json,
+          {},
+        )
+      end
+      it "001: Check Deleted" do
+        labels = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo"
+        ).first
+        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
+      end
+    end
   end
 end

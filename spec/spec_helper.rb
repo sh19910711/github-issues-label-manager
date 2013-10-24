@@ -108,6 +108,31 @@ Spork.prefork do
       end
     end
 
+    # delete label
+    config.before :each do
+      stub_request(
+        :delete,
+        /repos\/octocat\/gh-repo\/labels\/label1$/,
+      )
+      .to_return do |req|
+        params = JSON.parse req.body
+        labels = Server::Models::Labels.where(
+          :reponame => "octocat/gh-repo"
+        ).first
+        labels.labels.reject {|label|
+          label["name"] == "label1"
+        }
+        labels.save
+        # send response
+        {
+          :status   => 204,
+          :headers => {
+            "Content-Type" => "application/json",
+          },
+        }
+      end
+    end
+
     # get labels
     config.before :each do
       stub_request(

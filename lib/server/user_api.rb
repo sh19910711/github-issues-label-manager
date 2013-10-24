@@ -130,7 +130,7 @@ module Server
             # change github data
             github = GitHub.new login_user.github_access_token
             github.update_label(
-              "#{params_json["github_user_id"]}/#{params_json["github_repo_name"]}",
+              "#{github_user_id}/#{github_repo_name}",
               label_name,
               {
                 :name => params_json["name"],

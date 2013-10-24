@@ -33,7 +33,9 @@ module Server
       def self.delete_label! github_access_token, github_reponame, label_name
         res = where(
           :reponame => github_reponame,
-        ).destroy
+        ).first
+        res.labels = res.labels.reject {|label| label["name"] == label_name }
+        res.save
         github = GitHub.new github_access_token
         github.delete_label! github_reponame, label_name
       end

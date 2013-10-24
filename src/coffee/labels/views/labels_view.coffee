@@ -21,19 +21,38 @@ define(
         _.bindAll @, ["render"]
         @collection.on(
           "sync"
-          (label)=>
-            # after sync
+          (target)=>
+            if target instanceof @collection.constructor
+              target.each (label)=>
+                $("[data-label-cid=\"#{label.cid}\"]").removeClass "syncing"
+            if target instanceof @collection.model
+              @add_label_view target
+              $("[data-label-cid=\"#{target.cid}\"]").removeClass "syncing"
           @
         )
         @collection.on(
           "add"
           (label)=>
             @add_label_view label
+            $("[data-label-cid=\"#{label.cid}\"]").addClass "syncing"
           @
         )
 
+      has_label_view: (label)->
+        if label.cid
+          if @$el.find("[data-label-cid=\"#{label.cid}\"]").length
+            return true
+        false
+
+      find_label_view: (label)->
+        if label.cid?
+          ret = @$el.find("[data-label-cid=\"#{label.cid}\"]")
+          if ret.length
+            return ret
+        false
+
       add_label_view: (label)->
-        unless !! @$el.find("##{label.get_view_id()}").length
+        unless @has_label_view label
           label_view = new Label.Views.LabelView(
             model: label
           )

@@ -32,8 +32,6 @@ module Server
         selected_2 = get_repos.select {|cand|
           cand[:full_name].end_with? "/#{reponame}"
         }
-        p selected_2
-        p reponame
         abort "error" if selected_2.length != 1
         selected_2[0][:full_name]
       end
@@ -71,7 +69,11 @@ module Server
       end
 
       def delete_label! reponame, label_name
-        @client.delete_label! reponame, label_name
+        @client.delete_label! resolve_reponame(reponame), label_name
+      end
+
+      def update_label reponame, label_name, label_info
+        @client.update_label resolve_reponame(reponame), label_name, label_info
       end
     end
   end

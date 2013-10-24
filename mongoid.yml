@@ -12,7 +12,7 @@ production:
 development:
   sessions:
     default:
-      database: <%= uri.path.sub('/','') %>
+      database: <%= uri.path.sub('/','') %>-dev
       username: <%= uri.user %>
       password: <%= uri.password %>
       hosts:
@@ -20,7 +20,7 @@ development:
 test:
   sessions:
     default:
-      database: <%= uri.path.sub('/','') %>
+      database: <%= uri.path.sub('/','') %>-test
       username: <%= uri.user %>
       password: <%= uri.password %>
       hosts:

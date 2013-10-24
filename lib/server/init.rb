@@ -44,6 +44,8 @@ module Server
       app.set :csrf_settings, {
         :skip => [
           "POST:/api/label",
+          "GET:/api/label/.*",
+          "PUT:/api/label/.*",
           "DELETE:/api/label/.*",
         ]
       }

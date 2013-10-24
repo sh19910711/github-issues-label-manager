@@ -30,5 +30,13 @@ end
 group :test do
   gem "rake"
   gem "rspec"
+  gem "spork"
+  gem "rack-test"
+  gem "simplecov"
+  gem "simplecov-rcov"
+  gem "ci_reporter"
+  gem "webmock"
+  gem "factory_girl"
+  gem "database_cleaner"
 end
 

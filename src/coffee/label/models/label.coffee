@@ -24,9 +24,6 @@ define(
         @on "sync", =>
         @
 
-      get_view_id: =>
-        "label-view-#{@get("id").replace(/\//g, "-")}"
-
       validate: ->
         color1 = @get "color"
         unless !! color1.match /^[0-9A-Z]{6}$/

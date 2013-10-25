@@ -1,5 +1,7 @@
 FactoryGirl.define do |f|
   factory :repo1, :class => Server::Models::Repository do
+    owner "user"
+    name "repo"
     reponame "user/repo"
     after :create do |a|
       a.labels.create(
@@ -29,15 +31,17 @@ FactoryGirl.define do |f|
     end
   end
   factory :octocat_repo, :class => Server::Models::Repository do
+    owner "octocat"
+    name "gh-repo"
     reponame "octocat/gh-repo"
     after :create do |a|
       a.labels.create(
         :name => "label6",
-        :color => "CCCCCC",
+        :color => "EEEEEE",
       )
       a.labels.create(
         :name => "label1",
-        :color => "CCCCCC",
+        :color => "EEEEEE",
       )
     end
   end

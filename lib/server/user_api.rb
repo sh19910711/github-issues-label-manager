@@ -120,62 +120,46 @@ module Server
 
       # Update Label
       app.put "/api/label/:label_id" do
-        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/(.*)$/
-        github_user_id   = matches[1]
-        github_repo_name = matches[2]
-        label_name       = matches[3]
         request.body.rewind
         params_json = JSON.parse request.body.read
         params[:csrf_token] = params_json["csrf_token"]
         require_get_csrf do
           require_login do
+            label = Label.where(:id => params[:label_id]).first
+            repo = label.repository
             label_info = {}
             if params_json["name"]
               label_info[:name] = params_json["name"]
             end
             if params_json["color"]
-              label_info[:name] = params_json["color"]
+              label_info[:color] = params_json["color"]
             end
             # change github data
             github = GitHub.new login_user.github_access_token
             github.update_label(
-              "#{github_user_id}/#{github_repo_name}",
-              label_name,
+              "#{repo.owner}/#{repo.name}",
+              label.name,
               label_info,
             )
             # change model data
-            repo = Repository.where(
-              :reponame => "#{github_user_id}/#{github_repo_name}",
-            ).first
-            label = {}
-            label[:name] = params_json["name"] if params_json["name"]
-            label[:color] = params_json["color"] if params_json["color"]
-            repo.labels.where(:name => label_name).first.update_attributes label
+            label.update_attributes label_info
             # send result
             return {
-              :result => "OK",
+              :id => label.id,
+              :name => label.name,
+              :color => label.color,
             }.to_json
           end
         end
-        return {
-          :result => "NG",
-        }.to_json
       end
 
       # Get Label
       app.get "/api/label/:label_id" do
-        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
-        github_user_id   = matches[1]
-        github_repo_name = matches[2]
-        label_name       = matches[3]
-        repo = Repository.where(
-          :reponame => "#{github_user_id}/#{github_repo_name}",
-        ).cache.first
-        label1 = repo.labels.where(:name => label_name).first
+        label = Label.where(:id => params[:label_id]).first
         {
-          :id => label1.id,
-          :name => label1.name,
-          :color => label1.color,
+          :id => label.id,
+          :name => label.name,
+          :color => label.color,
         }.to_json
       end
 
@@ -186,14 +170,12 @@ module Server
         params[:csrf_token] = params_json["csrf_token"]
         require_get_csrf do
           require_login do
-            matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
-            github_user_id   = matches[1]
-            github_repo_name = matches[2]
-            label_name       = matches[3]
+            label = Label.where(:id => params[:label_id]).first
+            repo = label.repository
             Repository.delete_label!(
               login_user.github_access_token,
-              "#{github_user_id}/#{github_repo_name}",
-              label_name,
+              "#{repo.owner}/#{repo.name}",
+              label.name,
             )
             return {
               :result => "OK",

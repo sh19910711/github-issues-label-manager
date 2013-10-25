@@ -29,7 +29,10 @@ describe "T003: User API" do
     end
 
     describe "002: Read" do
-      before { get "/api/label/#{CGI.escape("user/repo/label1")}" }
+      before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
+        get "/api/label/#{label1.id}"
+      end
       subject { JSON.parse(last_response.body)["color"] }
       it "001: Read" do
         should eq "EEEEEE"
@@ -38,8 +41,9 @@ describe "T003: User API" do
 
     describe "003: Update" do
       before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
         put(
-          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
+          "/api/label/#{label1.id}",
           {
             "csrf_token" => "this is token",
             "name" => "new-label1",
@@ -64,8 +68,9 @@ describe "T003: User API" do
 
     describe "004: Delete" do
       before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
         delete(
-          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
+          "/api/label/#{label1.id}",
           {
             "csrf_token" => "this is token",
           }.to_json,

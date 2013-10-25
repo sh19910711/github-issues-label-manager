@@ -8,7 +8,9 @@ module Server
       include Server::Models
       include Mongoid::Document
 
-      field :reponame
+      field :owner, type: String
+      field :name, type: String
+      field :reponame, type: String
       has_many :labels
 
       def self.update_by_reponame github_access_token, github_reponame

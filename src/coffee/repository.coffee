@@ -1,8 +1,13 @@
 define(
   [
     "./repository/models"
+    "./repository/views"
   ]
-  (Models)->
+  (
+    Models
+    Views
+  )->
     class Repository
       @Models: Models
+      @Views: Views
 )

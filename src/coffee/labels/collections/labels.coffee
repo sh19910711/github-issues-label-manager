@@ -33,7 +33,6 @@ define(
             csrf_token: Common.Utils.get_csrf_token()
           }
         )
-        new_label.set "id", "#{@github_user_id}/#{@github_repo_name}/#{label_info.name}"
 
     Labels
 )

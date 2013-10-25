@@ -1,25 +1,34 @@
+require "server/models"
 require "server/common"
 
 module Server
   module Models
-    class Labels
+    class Repository
       include Server::Common
+      include Server::Models
       include Mongoid::Document
 
       field :reponame
-      field :labels, type: Array
+      has_many :labels
 
       def self.update_by_reponame github_access_token, github_reponame
         github = GitHub.new github_access_token
         labels = github.get_repo_issues_labels(github_reponame)
         find_or_create_by(
           :reponame => github_reponame,
-        ).update_attributes(
-          :labels => labels,
         )
-        where(
+        collections = where(
           :reponame => github_reponame,
         ).cache.first
+        labels.each {|label|
+          collections.labels.find_or_create_by(
+            :name => label[:name]
+          )
+          .update_attributes(
+            :color => label[:color]
+          )
+        }
+        collections
       end
 
       def self.get_by_reponame github_access_token, github_reponame
@@ -31,11 +40,12 @@ module Server
       end
 
       def self.delete_label! github_access_token, github_reponame, label_name
-        res = where(
+        labels = where(
           :reponame => github_reponame,
         ).first
-        res.labels = res.labels.reject {|label| label["name"] == label_name }
-        res.save
+        labels.labels.where(
+          :name => label_name,
+        ).destroy
         github = GitHub.new github_access_token
         github.delete_label! github_reponame, label_name
       end

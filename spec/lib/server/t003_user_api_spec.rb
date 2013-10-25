@@ -21,11 +21,10 @@ describe "T003: User API" do
         )
       end
       it "001: Check Created" do
-        JSON.parse(last_response.body)["result"].should eq "OK"
-        new_label = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo",
-        ).first.labels.select {|label| label["name"] == "new-label1"}.first
-        new_label["color"].should eq "ffffff"
+        ).first.labels.where({:name => "new-label1"}).first
+        repo.color.should eq "ffffff"
       end
     end
 
@@ -50,14 +49,14 @@ describe "T003: User API" do
         )
       end
       it "001: Check Updated" do
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
-        labels.labels.count {|label| label["name"] == "new-label1"}.should eq 1
-        labels.labels.each {|label|
-          if label["name"] == "new-label1"
-            label["color"].should eq "C0FFEE"
+        repo.labels.where(:name => "label1").count.should eq 0
+        repo.labels.where(:name => "new-label1").count.should eq 1
+        repo.labels.each {|label|
+          if label.name == "new-label1"
+            label.color.should eq "C0FFEE"
           end
         }
       end
@@ -74,10 +73,10 @@ describe "T003: User API" do
         )
       end
       it "001: Check Deleted" do
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
+        repo.labels.where(:name => "label1").count.should eq 0
       end
     end
   end

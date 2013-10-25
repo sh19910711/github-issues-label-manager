@@ -24,7 +24,8 @@ define(
         @model.on(
           "sync"
           =>
-            @model.set "id", @model.get("id").replace(/\/[^\/]*$/, "/#{@model.get("name")}")
+            @model.set "id", @model.get("name")
+            console.log @model
         )
         @model.on(
           "destroy"

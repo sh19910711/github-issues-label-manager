@@ -5,6 +5,7 @@ define(
     "backbone"
     "app/common"
     "app/labels"
+    "app/label_category"
     "com/backbone/backbone-fetch-cache"
   ]
   (
@@ -13,6 +14,7 @@ define(
     Backbone
     Common
     Labels
+    LabelCategory
   )->
     class UserRepoView extends Backbone.View
       tagName: "div"
@@ -25,8 +27,15 @@ define(
           "event_add_label"
         )
         @labels = new Labels.Collections.Labels([], options.labels)
-        @labels_view = new Labels.Views.LabelsView(
-          collection: @labels
+        @label_category = new LabelCategory.Models.LabelCategory()
+        @label_category_view = new LabelCategory.Views.LabelCategoryView(
+          model: @label_category
+        )
+        @labels.on(
+          "sync"
+          ()=>
+            console.log "after sync"
+            @label_category.parse_labels @labels
         )
         @labels.fetch(
           cache: true
@@ -50,7 +59,7 @@ define(
         @$el.append "<h3>Issues Labels</h3>"
         @$el.append =>
           wrapper = $("<div class=\"well\"></div>")
-          wrapper.append @labels_view.render().el
+          wrapper.append @label_category_view.render().el
           wrapper
         @
 

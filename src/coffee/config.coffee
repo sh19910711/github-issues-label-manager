@@ -13,6 +13,7 @@ define(
         "app/page": "app/js/page"
         "app/labels": "app/js/labels"
         "app/label": "app/js/label"
+        "app/label_category": "app/js/label_category"
         # components
         "com/jquery/jquery.pjax":             "com/jquery-pjax/js/jquery.pjax"
         "com/bootstrap/bootstrap":            "com/bootstrap/js/bootstrap"

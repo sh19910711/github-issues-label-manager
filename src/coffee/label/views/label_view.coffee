@@ -22,11 +22,6 @@ define(
       initialize: ()->
         _.bindAll @, ["render"]
         @model.on(
-          "sync"
-          =>
-            @model.set "id", @model.get("id").replace(/\/[^\/]*$/, "/#{@model.get("name")}")
-        )
-        @model.on(
           "destroy"
           =>
             @$el.remove()

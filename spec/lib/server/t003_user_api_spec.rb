@@ -21,16 +21,18 @@ describe "T003: User API" do
         )
       end
       it "001: Check Created" do
-        JSON.parse(last_response.body)["result"].should eq "OK"
-        new_label = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo",
-        ).first.labels.select {|label| label["name"] == "new-label1"}.first
-        new_label["color"].should eq "ffffff"
+        ).first.labels.where({:name => "new-label1"}).first
+        repo.color.should eq "ffffff"
       end
     end
 
     describe "002: Read" do
-      before { get "/api/label/#{CGI.escape("user/repo/label1")}" }
+      before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
+        get "/api/label/#{label1.id}"
+      end
       subject { JSON.parse(last_response.body)["color"] }
       it "001: Read" do
         should eq "EEEEEE"
@@ -39,8 +41,9 @@ describe "T003: User API" do
 
     describe "003: Update" do
       before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
         put(
-          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
+          "/api/label/#{label1.id}",
           {
             "csrf_token" => "this is token",
             "name" => "new-label1",
@@ -50,14 +53,14 @@ describe "T003: User API" do
         )
       end
       it "001: Check Updated" do
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
-        labels.labels.count {|label| label["name"] == "new-label1"}.should eq 1
-        labels.labels.each {|label|
-          if label["name"] == "new-label1"
-            label["color"].should eq "C0FFEE"
+        repo.labels.where(:name => "label1").count.should eq 0
+        repo.labels.where(:name => "new-label1").count.should eq 1
+        repo.labels.each {|label|
+          if label.name == "new-label1"
+            label.color.should eq "C0FFEE"
           end
         }
       end
@@ -65,8 +68,9 @@ describe "T003: User API" do
 
     describe "004: Delete" do
       before do
+        label1 = Server::Models::Repository.where(:reponame => "octocat/gh-repo").first.labels.where(:name => "label1").first
         delete(
-          "/api/label/#{CGI.escape("octocat/gh-repo/label1")}",
+          "/api/label/#{label1.id}",
           {
             "csrf_token" => "this is token",
           }.to_json,
@@ -74,10 +78,10 @@ describe "T003: User API" do
         )
       end
       it "001: Check Deleted" do
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.count {|label| label["name"] == "label1"}.should eq 0
+        repo.labels.where(:name => "label1").count.should eq 0
       end
     end
   end

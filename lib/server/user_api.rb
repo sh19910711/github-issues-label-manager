@@ -40,17 +40,17 @@ module Server
       app.put "/api/labels/:github_user_id/:github_repo_name" do
         require_get_csrf do
           require_login do
-            Labels.update_by_reponame(
+            Repository.update_by_reponame(
               login_user.github_access_token,
               "#{params[:github_user_id]}/#{params[:github_repo_name]}",
             )
-            labels = Labels.get_by_reponame(
+            repo = Repository.get_by_reponame(
               login_user.github_access_token,
               "#{params[:github_user_id]}/#{params[:github_repo_name]}",
             )
-            labels = labels.labels.map do |label|
+            labels = repo.labels.map do |label|
               {
-                :id => "#{labels.reponame}/#{label["name"]}",
+                :id => "#{repo.reponame}/#{label["name"]}",
                 :name => label["name"],
                 :color => label["color"],
               }
@@ -63,15 +63,16 @@ module Server
       app.get "/api/labels/:github_user_id/:github_repo_name" do
         require_login do
           halt 403 if login_user.github_user_id != params[:github_user_id]
-          labels = Labels.get_by_reponame(
+          repo = Repository.get_by_reponame(
             login_user.github_access_token,
             "#{params[:github_user_id]}/#{params[:github_repo_name]}",
           )
-          labels = labels.labels.map do |label|
+          p repo
+          labels = repo.labels.all.map do |label|
             {
-              :id => "#{labels.reponame}/#{label["name"]}",
-              :name => label["name"],
-              :color => label["color"],
+              :id => label.id,
+              :name => label.name,
+              :color => label.color,
             }
           end
           labels.to_json
@@ -98,12 +99,17 @@ module Server
               "#{params_json["github_user_id"]}/#{params_json["github_repo_name"]}",
               label_info,
             )
-            Labels.update_by_reponame(
+            repo = Repository.update_by_reponame(
               login_user.github_access_token,
               "#{params_json["github_user_id"]}/#{params_json["github_repo_name"]}",
             )
+            new_label = repo.labels.where(
+              :name => params_json["name"],
+            ).cache.first
             return {
-              :result => "OK",
+              :id => new_label.id,
+              :name => params_json["name"],
+              :color => params_json["color"],
             }.to_json
           end
           return {
@@ -114,66 +120,46 @@ module Server
 
       # Update Label
       app.put "/api/label/:label_id" do
-        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
-        github_user_id   = matches[1]
-        github_repo_name = matches[2]
-        label_name       = matches[3]
         request.body.rewind
         params_json = JSON.parse request.body.read
         params[:csrf_token] = params_json["csrf_token"]
         require_get_csrf do
           require_login do
+            label = Label.where(:id => params[:label_id]).first
+            repo = label.repository
             label_info = {}
             if params_json["name"]
               label_info[:name] = params_json["name"]
             end
             if params_json["color"]
-              label_info[:name] = params_json["color"]
+              label_info[:color] = params_json["color"]
             end
             # change github data
             github = GitHub.new login_user.github_access_token
             github.update_label(
-              "#{github_user_id}/#{github_repo_name}",
-              label_name,
+              "#{repo.owner}/#{repo.name}",
+              label.name,
               label_info,
             )
             # change model data
-            repo_labels = Labels.where(
-              :reponame => "#{github_user_id}/#{github_repo_name}",
-            ).first
-            repo_labels.labels.map {|label|
-              if label["name"] == label_name
-                label["name"] = params_json["name"] if params_json["name"]
-                label["color"] = params_json["color"] if params_json["color"]
-              end
-              label
-            }
-            repo_labels.save
+            label.update_attributes label_info
             # send result
             return {
-              :result => "OK",
+              :id => label.id,
+              :name => label.name,
+              :color => label.color,
             }.to_json
           end
         end
-        return {
-          :result => "NG",
-        }.to_json
       end
 
       # Get Label
       app.get "/api/label/:label_id" do
-        matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
-        github_user_id   = matches[1]
-        github_repo_name = matches[2]
-        label_name       = matches[3]
-        repo_labels = Labels.where(
-          :reponame => "#{github_user_id}/#{github_repo_name}",
-        ).cache.first
-        label1 = repo_labels.labels.select{|label| label["name"] == label_name }.first
+        label = Label.where(:id => params[:label_id]).first
         {
-          :id => params["label_id"],
-          :name => label1["name"],
-          :color => label1["color"],
+          :id => label.id,
+          :name => label.name,
+          :color => label.color,
         }.to_json
       end
 
@@ -184,14 +170,12 @@ module Server
         params[:csrf_token] = params_json["csrf_token"]
         require_get_csrf do
           require_login do
-            matches          = params[:label_id].match /([^\/]*)\/([^\/]*)\/([^\/]*)/
-            github_user_id   = matches[1]
-            github_repo_name = matches[2]
-            label_name       = matches[3]
-            Labels.delete_label!(
+            label = Label.where(:id => params[:label_id]).first
+            repo = label.repository
+            Repository.delete_label!(
               login_user.github_access_token,
-              "#{github_user_id}/#{github_repo_name}",
-              label_name,
+              "#{repo.owner}/#{repo.name}",
+              label.name,
             )
             return {
               :result => "OK",

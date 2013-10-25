@@ -48,17 +48,17 @@ Spork.prefork do
       )
       .to_return do |req|
         params = JSON.parse req.body
-        labels = Server::Models::Labels.where(
-          :reponame => "octocat/gh-repo"
+        # TODO: use fake gh-labels
+        repo = Server::Models::Repository.where(
+          :reponame => "octocat/gh-repo",
         ).first
         # create new label
-        labels.labels.push(
-          {
-            "name" => params["name"],
-            "color" => params["color"],
-          }
+        repo.labels.find_or_create_by(
+          :name => params["name"],
         )
-        labels.save
+        .update_attributes(
+          :color => params["color"],
+        )
         # send response
         body = {
           "name" => params["name"],
@@ -82,17 +82,17 @@ Spork.prefork do
       )
       .to_return do |req|
         params = JSON.parse req.body
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.map {|label|
+        repo.labels.map {|label|
           if label["name"] == params["name"]
             label["name"] = params["name"]
             label["color"] = params["color"]
           end
           label
         }
-        labels.save
+        repo.save
         # send response
         body = {
           "name" => params["name"],
@@ -116,13 +116,13 @@ Spork.prefork do
       )
       .to_return do |req|
         params = JSON.parse req.body
-        labels = Server::Models::Labels.where(
+        repo = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first
-        labels.labels.reject {|label|
+        repo.labels.reject {|label|
           label["name"] == "label1"
         }
-        labels.save
+        repo.save
         # send response
         {
           :status   => 204,
@@ -140,7 +140,7 @@ Spork.prefork do
         /repos\/octocat\/gh-repo\/labels$/,
       )
       .to_return do |req|
-        body = Server::Models::Labels.where(
+        body = Server::Models::Repository.where(
           :reponame => "octocat/gh-repo"
         ).first.labels.to_json
         {
@@ -195,8 +195,8 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.before do
-      FactoryGirl.create :labels
-      FactoryGirl.create :octocat_labels
+      FactoryGirl.create :repo1
+      FactoryGirl.create :octocat_repo
       FactoryGirl.create :user
     end
     config.after { FactoryGirl.reload }

@@ -18,7 +18,6 @@ define(
         color: "#333333"
 
       initialize: (options)->
-        console.log "Label#initialize: ", @
         @set "color", @resolve_color_code @get "color"
         @on "change", =>
           @set "color", @resolve_color_code @get "color"

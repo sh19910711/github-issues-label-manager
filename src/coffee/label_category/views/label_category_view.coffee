@@ -19,7 +19,6 @@ define(
       className: "label-category-view"
 
       initialize: ->
-        console.log "LabelCategoryView#initialize", @model
         @model.on(
           "parsed"
           =>
@@ -30,11 +29,8 @@ define(
         !! @$el.find("[data-label-category-cid=\"#{cid}\"]").length
 
       render: ->
-        console.log "LabelCategoryView#render: #{@model.cid}"
         unless @has_cid(@model.cid)
-          console.log "model cid = #{@model.cid} is_leaf = ", @model.is_leaf()
           if @model.is_leaf()
-            console.log "model cid = #{@model.cid}", @model.get "label_model"
             label_view = new Label.Views.LabelView(
               model: @model.get "label_model"
             )
@@ -45,7 +41,6 @@ define(
               "</div>"
             )
             @$el.find("[data-label-category-cid='#{@model.cid}']").append label_view.render().el
-            # @$el.find("[data-label-category-cid='#{@model.cid}']").append @render_controllers()
           else
             @$el.append(
               "<div " +
@@ -71,7 +66,7 @@ define(
 
       render_controllers: ->
         "<div>" +
-        "<button class='btn btn-xs btn-warning'>edit</button> " +
-        "<button class='btn btn-xs btn-danger'>remove</button>" +
+        "<button class='btn btn-xs btn-warning disabled'>edit</button> " +
+        "<button class='btn btn-xs btn-danger disabled'>remove</button>" +
         "</div>"
 )

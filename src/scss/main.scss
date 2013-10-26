@@ -45,7 +45,14 @@ body {
     line-height: 32px;
   }
   & > .name {
-    font-size: 12px;
+    & {
+      font-size: 12px;
+    }
+    input {
+      height: 24px;
+      font-size: 12px;
+      line-height: 12px;
+    }
   }
   & > .controllers {
   }

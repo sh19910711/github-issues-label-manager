@@ -32,7 +32,6 @@ define(
           childrens: {}
           flag_leaf: false
         )
-        console.log @label_category
         @label_category_view = new LabelCategory.Views.LabelCategoryView(
           model: @label_category
         )

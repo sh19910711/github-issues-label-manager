@@ -27,14 +27,18 @@ define(
           "event_add_label"
         )
         @labels = new Labels.Collections.Labels([], options.labels)
-        @label_category = new LabelCategory.Models.LabelCategory()
+        @label_category = new LabelCategory.Models.LabelCategory(
+          name: "root"
+          childrens: {}
+          flag_leaf: false
+        )
+        console.log @label_category
         @label_category_view = new LabelCategory.Views.LabelCategoryView(
           model: @label_category
         )
         @labels.on(
           "sync"
           ()=>
-            console.log "after sync"
             @label_category.parse_labels @labels
         )
         @labels.fetch(

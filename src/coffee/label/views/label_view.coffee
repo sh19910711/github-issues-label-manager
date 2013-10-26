@@ -19,7 +19,8 @@ define(
         "click .edit": "event_edit_label"
         "click .edit-save": "event_edit_save_label"
 
-      initialize: ()->
+      initialize: (options)->
+        console.log "LabelView#initialize: ", options
         _.bindAll @, ["render"]
         @model.on(
           "destroy"
@@ -28,9 +29,11 @@ define(
         )
 
       render: ()=>
+        console.log "LabelView#render"
+        label_name = @model.get("name").match(/([^\/]*)$/)[1]
         @$el.append =>
           "<td class=\"label-name\" style=\"border-left: 3px solid ##{@model.get("color") || "333"}\" class=\"label-view\">" +
-          "#{@model.get("name")}" +
+          "#{label_name}" +
           "</td>" +
           "<td class=\"text-right\">" +
           "<button class=\"edit btn btn-xs btn-warning\">edit</button> " +

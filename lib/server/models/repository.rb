@@ -40,7 +40,7 @@ module Server
         res = where(
           :reponame => github_reponame,
         ).cache.first
-        return update_by_reponame(github_access_token, github_reponame) unless res.owner? && res.name? && res.reponame?
+        return update_by_reponame(github_access_token, github_reponame) unless defined?(res.owner) && defined?(res.name) && defined?(res.reponame)
         res
       end
 

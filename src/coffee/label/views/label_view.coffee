@@ -16,9 +16,10 @@ define(
       className: "label-view"
 
       events:
-        "click .remove": "event_remove_label"
-        "click .edit": "event_edit_label"
-        "click .save": "event_save_label"
+        "click .remove": "event_remove"
+        "click .edit": "event_edit"
+        "click .edit-save": "event_edit_save"
+        "click .edit-cancel": "event_edit_cancel"
 
       initialize: (options)->
         _.bindAll @, ["render"]
@@ -51,10 +52,10 @@ define(
       render_edit_view: =>
         @$el.find(".name").empty().append "<input type='text' value='#{@model.get("name")}'>"
         @$el.find(".controllers").empty().append =>
-          "<button class='save btn btn-xs btn-primary'>save</button> " +
-          "<button class='remove btn btn-xs'>cancel</button>"
+          "<button class='edit-save btn btn-xs btn-primary'>save</button> " +
+          "<button class='edit-cancel btn btn-xs'>cancel</button>"
 
-      event_remove_label: ()=>
+      event_remove: ()=>
         @model.destroy(
           data: JSON.stringify
             csrf_token: Common.Utils.get_csrf_token()
@@ -62,11 +63,14 @@ define(
           success: ->
         )
 
-      event_edit_label: ()=>
+      event_edit: ()=>
         # action -> sync
         @render_edit_view()
 
-      event_save_label: ()=>
+      event_edit_cancel: ()=>
+        @render_normal_view()
+
+      event_edit_save: ()=>
         @model.save(
           {
             name: @$el.find(".name input").val()

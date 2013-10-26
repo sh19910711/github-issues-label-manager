@@ -62,7 +62,7 @@ define(
         @$el.append "<h3>Issues Labels</h3>"
         @$el.append =>
           wrapper = $("<div class=\"well\"></div>")
-          wrapper.append @label_category_view.render().el
+          wrapper.append @label_category_view.el
           wrapper
         @
 

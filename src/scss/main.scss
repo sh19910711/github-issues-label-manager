@@ -1,66 +1,11 @@
 @import "compass/css3";
 @import "compass/css3/user-interface";
 
+@import "label_view";
+@import "label_category_view";
+
 body {
   background: rgba(224, 224, 224, 1);
   color: rgba(62, 62, 62, 1);
   overflow-y: scroll;
 }
-
-.label-category-view, .label-child-category-view {
-  & > .category > .name {
-    float: left;
-    background: rgba(255, 255, 255, 0.7);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 12px;
-    border-radius: 6px;
-  }
-  & > .category > .controllers {
-    float: right;
-  }
-  & > .category {
-    padding: 6px;
-  }
-}
-
-.label-child-category-view {
-  background: rgba(102, 102, 102, 0.15);
-  padding: 8px;
-  padding-top: 6px;
-  margin: 6px 0;
-}
-
-.label-view {
-  // alignment
-  & > .name {
-    float: left;
-  }
-  & > .controllers {
-    float: right
-  }
-  // 
-  & {
-    height: 32px;
-    line-height: 32px;
-  }
-  & > .name {
-    & {
-      font-size: 12px;
-    }
-    input {
-      height: 24px;
-      font-size: 12px;
-      line-height: 12px;
-    }
-  }
-  & > .controllers {
-  }
-}
-
-.label-view {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 0 6px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-

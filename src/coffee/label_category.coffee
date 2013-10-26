@@ -1,13 +1,13 @@
 define(
   [
-    "./repository/models"
-    "./repository/views"
+    "./label_category/models"
+    "./label_category/views"
   ]
   (
     Models
     Views
   )->
-    class Repository
+    class LabelCategory
       @Models: Models
       @Views: Views
 )

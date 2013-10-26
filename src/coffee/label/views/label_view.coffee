@@ -12,20 +12,16 @@ define(
     Common
   )->
     class LabelView extends Backbone.View
-      tagName: "tr"
+      tagName: "div"
+      className: "label-view"
 
       events:
         "click .remove": "event_remove_label"
         "click .edit": "event_edit_label"
-        "click .edit-save": "event_edit_save_label"
+        "click .save": "event_save_label"
 
-      initialize: ()->
+      initialize: (options)->
         _.bindAll @, ["render"]
-        @model.on(
-          "sync"
-          =>
-            @model.set "id", @model.get("id").replace(/\/[^\/]*$/, "/#{@model.get("name")}")
-        )
         @model.on(
           "destroy"
           =>
@@ -33,16 +29,30 @@ define(
         )
 
       render: ()=>
+        @$el.css "border-left", "3px solid ##{@model.get("color") || "333"}"
         @$el.append =>
-          "<td class=\"label-name\" style=\"border-left: 3px solid ##{@model.get("color") || "333"}\" class=\"label-view\">" +
-          "#{@model.get("name")}" +
-          "</td>" +
-          "<td class=\"text-right\">" +
-          "<button class=\"edit btn btn-xs btn-warning\">edit</button> " +
-          "<button class=\"remove btn btn-xs btn-danger\">remove</button>" +
-          "</td>"
+          "<div class=\"name\" style=\"\" class=\"label-view\">" +
+          "</div>" +
+          "<div class=\"controllers\">" +
+          "</div>" +
+          "<div class='clearfix'></div>"
+        @render_normal_view()
         @$el.attr "data-label-cid", @model.cid
         @
+
+      render_normal_view: =>
+        label_name = @model.get("name").match(/([^\/]*)$/)[1]
+        @$el.find(".name").empty().append =>
+          "#{label_name}"
+        @$el.find(".controllers").empty().append =>
+          "<button class=\"edit btn btn-xs btn-warning\">edit</button> " +
+          "<button class=\"remove btn btn-xs btn-danger\">remove</button>"
+
+      render_edit_view: =>
+        @$el.find(".name").empty().append "<input type='text' value='#{@model.get("name")}'>"
+        @$el.find(".controllers").empty().append =>
+          "<button class='save btn btn-xs btn-primary'>save</button> " +
+          "<button class='remove btn btn-xs'>cancel</button>"
 
       event_remove_label: ()=>
         @model.destroy(
@@ -54,20 +64,20 @@ define(
 
       event_edit_label: ()=>
         # action -> sync
-        @$el.find("td.label-name").empty().append "<div class='form-inline'><div class='form-group'><input type='text' class='form-control' value='#{@model.get("name")}'></div><button class='btn btn-primary edit-save'>save</button></div>"
+        @render_edit_view()
 
-      event_edit_save_label: ()=>
+      event_save_label: ()=>
         @model.save(
           {
-            name: @$el.find(".label-name input").val()
+            name: @$el.find(".name input").val()
           }
           {
             data: JSON.stringify
               csrf_token: Common.Utils.get_csrf_token()
-              name: @$el.find(".label-name input").val()
+              name: @$el.find(".name input").val()
             dataType: "json"
             success: =>
-              @$el.find("td.label-name").empty().append "#{@model.get("name")}"
+              @render_normal_view()
           }
         )
 )

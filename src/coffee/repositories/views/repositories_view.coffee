@@ -4,12 +4,14 @@ define(
     "jquery"
     "backbone"
     "app/common"
+    "app/repository"
   ]
   (
     _
     $
     Backbone
     Common
+    Repository
   )->
     class RepositoriesView extends Backbone.View
       tagName: "table"
@@ -18,25 +20,22 @@ define(
       initialize: (options)->
         _.bindAll @, ["render"]
         @collection.on(
-          "fetch-end"
-          ()->
+          "sync"
+          ()=>
             @render()
-          @
         )
-        @collection.fetch_repos()
+        @collection.fetch
+          cache: true
+          data:
+            csrf_token: Common.Utils.get_csrf_token()
         @
 
       render: ()->
-        @$el.empty()
-        @collection.each(
-          (repo)->
-            @$el.append(
-              "<tr data-repo-id=\"#{repo.get('id')}\"><td>" +
-              "<a class='pjaxable' href=\"/repos/#{repo.get('full_name')}\">" +
-              "#{repo.get('name')}" +
-              "</a></></tr>"
-            )
-          @
-        )
+        @collection.each (repo)=>
+          unless !! @$el.find("##{repo.id}").length
+            @$el.append =>
+              repo_view = new Repository.Views.RepositoryView
+                model: repo
+              repo_view.render().el
         @
 )

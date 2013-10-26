@@ -15,6 +15,9 @@ define(
     Label
   )->
     class LabelCategoryView extends Backbone.View
+      tagName: "div"
+      className: "label-category-view"
+
       initialize: ->
         console.log "LabelCategoryView#initialize", @model
         @model.on(
@@ -38,7 +41,6 @@ define(
             @$el.append(
               "<div " +
               "data-label-category-cid='#{@model.cid}' " +
-              "class='label-category'" +
               ">" +
               "</div>"
             )
@@ -48,10 +50,13 @@ define(
             @$el.append(
               "<div " +
               "data-label-category-cid='#{@model.cid}' " +
-              "class='label-category'" +
+              "class='label-child-category-view'" +
               ">" +
-              "<div>#{@model.get("name")}</div>" +
-              @render_controllers() +
+              "<div class='category'>" +
+              "<div class='name'>#{@model.get("name")}</div> " +
+              "<div class='controllers'>" + @render_controllers() + "</div> " +
+              "<div class='clearfix'></div>"
+              "</div>" +
               "</div>"
             )
             base_element = @$el.find "[data-label-category-cid=\"#{@model.cid}\"]"
@@ -66,7 +71,7 @@ define(
 
       render_controllers: ->
         "<div>" +
-        "<button class='btn btn-xs btn-warning'>edit</button>" +
+        "<button class='btn btn-xs btn-warning'>edit</button> " +
         "<button class='btn btn-xs btn-danger'>remove</button>" +
         "</div>"
 )

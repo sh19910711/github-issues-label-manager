@@ -12,7 +12,8 @@ define(
     Common
   )->
     class LabelView extends Backbone.View
-      tagName: "tr"
+      tagName: "div"
+      className: "label-view"
 
       events:
         "click .remove": "event_remove_label"
@@ -31,14 +32,16 @@ define(
       render: ()=>
         console.log "LabelView#render"
         label_name = @model.get("name").match(/([^\/]*)$/)[1]
+        @$el.css "border-left", "3px solid ##{@model.get("color") || "333"}"
         @$el.append =>
-          "<td class=\"label-name\" style=\"border-left: 3px solid ##{@model.get("color") || "333"}\" class=\"label-view\">" +
+          "<div class=\"name\" style=\"\" class=\"label-view\">" +
           "#{label_name}" +
-          "</td>" +
-          "<td class=\"text-right\">" +
+          "</div>" +
+          "<div class=\"controllers\">" +
           "<button class=\"edit btn btn-xs btn-warning\">edit</button> " +
           "<button class=\"remove btn btn-xs btn-danger\">remove</button>" +
-          "</td>"
+          "</div>" + 
+          "<div class='clearfix'></div>"
         @$el.attr "data-label-cid", @model.cid
         @
 

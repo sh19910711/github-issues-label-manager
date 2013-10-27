@@ -2,6 +2,17 @@ module.exports = (grunt)->
   _ = grunt.util._
   init_config = grunt.config()
 
+  livereload_port = process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
+
+  livereload_options =
+    enabled: true
+    port: livereload_port
+    extensions: ['js', 'css']
+
+  unless livereload_port?
+    _(livereload_options).extend
+      enabled: false
+
   # este-watch
   _(init_config).extend
     esteWatch:
@@ -12,10 +23,7 @@ module.exports = (grunt)->
           './spec/src/coffee/**/'
           './src/scss/**/'
         ]
-        livereload:
-          enabled: true
-          port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
-          extensions: ['js', 'css']
+        livereload: livereload_options
 
       'scss': (path) =>
         ["compass:build"]

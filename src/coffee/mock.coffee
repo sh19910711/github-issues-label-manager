@@ -50,8 +50,12 @@ define(
                 labels.off "sync", update_func
                 deferreds = labels.map (label)->
                   deferred = new $.Deferred()
-                  label.destroy(
-                    success: deferred.resolve
+                  setTimeout(
+                    ->
+                      label.destroy(
+                        success: deferred.resolve
+                      )
+                    0
                   )
                   deferred.promise()
                 $.when.apply(null, deferreds).done ->

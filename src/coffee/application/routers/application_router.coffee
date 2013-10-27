@@ -37,7 +37,7 @@ define(
         "repos/:github_user_id/:github_repo_name": "show_repo"
         "user_status": "show_user_status"
         "MIT-LICENSE.:suffix": "show_mit_license"
-        "mock/repos/sh19910711/js2ch": "show_repo_mock"
+        "demo": "show_repo_mock"
 
       show_index: ->
         @load_contents "/"
@@ -70,13 +70,13 @@ define(
         @load_contents "/repos/#{github_user_id}/#{github_repo_name}"
 
       show_repo_mock: ->
-        Mock.init()
         @page_view = new Page.Views.UserRepoView(
           labels:
             github_user_id: "sh19910711"
             github_repo_name: "js2ch"
         )
-        @load_contents "/mock/repos/sh19910711/js2ch"
+        Mock.init @page_view
+        @load_contents "/demo"
 
       load_contents: (path)->
         $.pjax(

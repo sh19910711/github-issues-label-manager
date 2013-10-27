@@ -19,4 +19,7 @@ define(
       @get_root: ->
         window
 
+      @get_server_version: ->
+        $("meta[data-server-version]").data("server-version")
+
 )

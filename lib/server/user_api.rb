@@ -67,7 +67,6 @@ module Server
             login_user.github_access_token,
             "#{params[:github_user_id]}/#{params[:github_repo_name]}",
           )
-          p repo
           labels = repo.labels.all.map do |label|
             {
               :id => label.id,

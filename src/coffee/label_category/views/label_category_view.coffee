@@ -23,8 +23,12 @@ define(
           "parsed"
           =>
             @build_dom()
-            @render()
             @$el.children(".category").remove()
+        )
+        @model.on(
+          "destroy"
+          =>
+            @$el.remove()
         )
 
       has_cid: (cid)->
@@ -37,7 +41,9 @@ define(
           if ! @$el.children(".childrens").length
             childrens_element = $("<div class='childrens'></div>")
             @$el.append childrens_element
+          childrens_element.empty()
           _(childrens).each (child_model)=>
+            child_label = child_model.get("label")
             unless @has_cid child_model.cid
               child_view = new LabelCategoryView(
                 model: child_model
@@ -48,13 +54,15 @@ define(
             child_view = @$el.find("[data-label-category-cid=\"#{child_model.cid}\"]").data "view"
             child_view.build_dom()
 
-      render: ->
+      render: =>
         @$el.attr "data-label-category-cid", @model.cid
-        if @model.is_leaf()
-          label_view = new Label.Views.LabelView(
-            model: @model.get "label_model"
-          )
-          @$el.append label_view.render().el
+        if @model.get("label")
+          label = @model.get("label")
+          unless @$el.find("[data-label-cid=\"#{label.cid}\"]").length
+            label_view = new Label.Views.LabelView(
+              model: label
+            )
+            @$el.append label_view.render().el
         else
           @$el.append(
             "<div class='category'>" +

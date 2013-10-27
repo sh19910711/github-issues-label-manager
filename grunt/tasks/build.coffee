@@ -103,6 +103,19 @@ module.exports = (grunt)->
           sassDir: "src/scss"
           cssDir: "lib/server/static/lib/app/css"
  
+  # uglify
+  glob = require "glob"
+  uglify_targets = glob.sync("./lib/server/static/lib/com/**/*.js").map (path)->
+    res = {}
+    res[path] = path
+    res
+  _(init_config).extend
+    uglify:
+      options:
+        preserveComments: true
+      "build":
+        files: uglify_targets
+
   # apply config
   grunt.initConfig init_config
 
@@ -123,5 +136,6 @@ module.exports = (grunt)->
       "copy:build"
       "clean:after-build"
       "copy:after-build"
+      "uglify:build"
     ]
   )

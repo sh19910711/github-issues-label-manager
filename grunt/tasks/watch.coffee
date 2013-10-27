@@ -16,8 +16,10 @@ module.exports = (grunt)->
           enabled: true
           port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
           extensions: ['js', 'css']
+
       'scss': (path) =>
         ["compass:build"]
+
       'coffee': (path) =>
         if path.match(/^spec\/src\/coffee\//)
           ['test']

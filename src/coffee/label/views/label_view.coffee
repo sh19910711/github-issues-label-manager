@@ -70,7 +70,7 @@ define(
       event_edit_cancel: ()=>
         @render_normal_view()
 
-      event_edit_save: ()=>
+      event_edit_save: ()->
         @model.save(
           {
             name: @$el.find(".name input").val()

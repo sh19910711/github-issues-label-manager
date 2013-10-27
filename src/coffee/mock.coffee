@@ -20,14 +20,22 @@ define(
       @init: (user_repo_page)->
         real_version = Common.Utils.get_server_version()
         current_version = localStorage.getItem("mock-version")
+        _(Label.Views.LabelView::).extend(
+        )
         _(Label.Models.Label::).extend
+          toJSON: ->
+            {
+              id: @attributes.id
+              name: @attributes.name
+              color: @attributes.color
+            }
           urlRoot: ->
             "/mock/api/label"
         _(Labels.Collections.Labels::).extend
           url: ->
             "/mock/api/labels/#{@github_user_id}/#{@github_repo_name}"
           localStorage: new Backbone.LocalStorage("mock/labels")
-        user_repo_page.$el.prepend "<p class='text-danger'>This is an application demo page. The data will be saved on local only.</p>"
+      
         user_repo_page.labels = new Labels.Collections.Labels(
           [
           ]
@@ -39,8 +47,12 @@ define(
         labels = user_repo_page.labels
         labels.on(
           "sync"
-          ()->
-            user_repo_page.label_category.parse_labels labels
+          (target)->
+            if target instanceof Labels.Collections.Labels
+              user_repo_page.label_category.parse_labels labels
+            if target instanceof Label.Models.Label
+              user_repo_page.label_category.parse_labels_recursive_func target.get("name"), target
+              user_repo_page.label_category.trigger "parsed"
         )
         setTimeout(
           ->

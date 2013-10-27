@@ -22,7 +22,6 @@ define(
         @collection.on(
           "sync"
           (target)=>
-            console.log "labels view collection sync"
             if target instanceof @collection.constructor
               target.each (label)=>
                 $("[data-label-cid=\"#{label.cid}\"]").removeClass "syncing"

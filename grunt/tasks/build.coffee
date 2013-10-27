@@ -136,5 +136,6 @@ module.exports = (grunt)->
       "copy:build"
       "clean:after-build"
       "copy:after-build"
+      "uglify:build"
     ]
   )

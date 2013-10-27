@@ -19,7 +19,8 @@
     "backbone": "~1.1.0",
     "underscore": "~1.5.2",
     "backbone-fetch-cache": "~1.1.2",
-    "sprintf": "*"
+    "sprintf": "*",
+    "backbone.localStorage": "~1.1.7"
   },
   "exportsOverride": {
     "bootstrap": {
@@ -45,11 +46,17 @@
     "backbone-fetch-cache": {
       "js": "backbone.fetch-cache.js"
     },
+    "backbone.localStorage": {
+      "js": "backbone.localStorage.js"
+    },
     "underscore": {
       "js": "underscore.js"
     },
     "sprintf": {
       "js": "src/sprintf.js"
     }
+  },
+  "devDependencies": {
+    "backbone.localStorage": "~1.1.7"
   }
 }

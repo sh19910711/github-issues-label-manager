@@ -1,0 +1,25 @@
+.label-category-view {
+  & {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .childrens & > .childrens {
+    padding: 1px 18px;
+    padding-right: 0;
+  }
+  & > .category {
+    & > .name {
+      float: left;
+    }
+    & > .controllers {
+      float: right;
+    }
+  }
+  & > .category {
+    & {
+      background: rgba(240, 240, 240, 0.9);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-weight: bold;
+      padding: 6px;
+    }
+  }
+}

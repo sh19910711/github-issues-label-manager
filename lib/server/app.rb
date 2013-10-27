@@ -4,6 +4,7 @@ require "server/common"
 require "server/models"
 require "server/user_api"
 require "server/user_page"
+require "server/mock_user_page"
 require "sinatra/base"
 
 # Sinatra::Extensions
@@ -17,6 +18,7 @@ module Server
     register Server::Init
     register Server::UserAPI
     register Server::UserPage
+    register Server::MockUserPage
 
     get "/" do
       if is_login?

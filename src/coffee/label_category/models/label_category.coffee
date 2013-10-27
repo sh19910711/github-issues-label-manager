@@ -17,27 +17,16 @@ define(
       defaults:
         name: ""
         childrens: {}
-        flag_leaf: false
-        label_model: undefined
-
-      is_leaf: ()->
-        @get "flag_leaf"
+        label: undefined
 
       initialize: ->
 
       parse_labels: (labels)->
         labels.each (label)=>
           @parse_labels_recursive_func label.get("name"), label
-        labels.on(
-          "sync"
-          (target)=>
-            if target instanceof labels.model
-              @parse_labels_recursive_func target.get("name"), target
-              @trigger "parsed"
-        )
         @trigger "parsed"
 
-      parse_labels_recursive_func: (label_name, label)->
+      parse_labels_recursive_func: (label_name, label)=>
         childrens = @get "childrens"
 
         # label_name example: "category/..."
@@ -49,17 +38,34 @@ define(
           childrens[category_name] = new LabelCategory(
             name: category_name
             childrens: {}
-            flag_leaf: ! /\//.test label_name
+          )
+          childrens[category_name].on(
+            "destroy"
+            =>
+              delete childrens[category_name]
+              unless _(childrens).keys().length || @get("label")
+                @destroy()
           )
           @set "childrens", childrens
 
         # is leaf
         unless /\//.test label_name
-          childrens[category_name].set "label_model", label
+          childrens[category_name].set "label", label
+          label.set "label_category", childrens[category_name]
+          label.on(
+            "change"
+            (target)=>
+              delete childrens[category_name]
+          )
+          label.on(
+            "remove"
+            =>
+              childrens[category_name].destroy() if childrens[category_name]?
+          )
           return null
 
         # rec
-        childrens[category_name].parse_labels_recursive_func next_label_name, label
+        childrens[category_name].parse_labels_recursive_func.call childrens[category_name], next_label_name, label
 
 )
 

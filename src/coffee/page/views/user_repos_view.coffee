@@ -40,7 +40,7 @@ define(
         @$el.append "<hr>"
         @$el.append =>
           wrapper = $("<div class=\"well\"></div>")
-          wrapper.append @repositories_view.render().el
+          wrapper.append @repositories_view.el
           wrapper
         @
 

@@ -91,6 +91,7 @@ module.exports = (grunt)->
             "com/jquery/jquery.pjax":             "empty:"
             "com/bootstrap/bootstrap":            "empty:"
             "com/backbone/backbone-fetch-cache":  "empty:"
+            "com/backbone/backbone-localstorage": "empty:"
             "com/sprintf/sprintf":                "empty:"
 
   # compass

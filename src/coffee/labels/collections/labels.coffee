@@ -15,7 +15,7 @@ define(
   )->
     class Labels extends Backbone.Collection
       model: Label.Models.Label
-      url: =>
+      url: ->
         "/api/labels/#{@github_user_id}/#{@github_repo_name}"
 
       initialize: (models, options)->

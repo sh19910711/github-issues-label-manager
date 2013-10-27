@@ -10,6 +10,7 @@ define(
         "app/common": "app/js/common"
         "app/repository": "app/js/repository"
         "app/repositories": "app/js/repositories"
+        "app/mock": "app/js/mock"
         "app/page": "app/js/page"
         "app/labels": "app/js/labels"
         "app/label": "app/js/label"
@@ -18,6 +19,7 @@ define(
         "com/jquery/jquery.pjax":             "com/jquery-pjax/js/jquery.pjax"
         "com/bootstrap/bootstrap":            "com/bootstrap/js/bootstrap"
         "com/backbone/backbone-fetch-cache":  "com/backbone-fetch-cache/js/backbone.fetch-cache"
+        "com/backbone/backbone-localstorage": "com/backbone.localStorage/js/backbone.localStorage"
         "com/sprintf/sprintf":                "com/sprintf/js/sprintf"
         # generals
         "jquery":       "com/jquery/js/jquery"
@@ -35,6 +37,11 @@ define(
             "jquery"
           ]
         "com/backbone/backbone-fetch-cache":
+          exports: "undefined"
+          deps: [
+            "backbone"
+          ]
+        "com/backbone/backbone-localstorage":
           exports: "undefined"
           deps: [
             "backbone"

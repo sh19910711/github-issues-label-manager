@@ -20,9 +20,12 @@ define(
       @init: (user_repo_page)->
         real_version = Common.Utils.get_server_version()
         current_version = localStorage.getItem("mock-version")
-        _(Label.Views.LabelView::).extend(
-        )
-        _(Label.Models.Label::).extend
+
+        # extends
+        class MockLabel extends Label.Models.Label
+        class MockLabels extends Labels.Collections.Labels
+
+        _(MockLabel::).extend
           toJSON: ->
             {
               id: @attributes.id
@@ -31,12 +34,14 @@ define(
             }
           urlRoot: ->
             "/mock/api/label"
-        _(Labels.Collections.Labels::).extend
+        _(MockLabels::).extend
+          model: MockLabel
           url: ->
             "/mock/api/labels/#{@github_user_id}/#{@github_repo_name}"
           localStorage: new Backbone.LocalStorage("mock/labels")
       
-        user_repo_page.labels = new Labels.Collections.Labels(
+        user_repo_page.$el.prepend "<p class='text-danger'>This is an application demo page. All data are saved only on local.</p>"
+        user_repo_page.labels = new MockLabels(
           [
           ]
           {
@@ -78,6 +83,8 @@ define(
                     {"id":"526b81c305a91451ea000005","name":"report/\u8cea\u554f","color":"cccccc"}
                     {"id":"526b81c305a91451ea000006","name":"report/\u69d8\u5b50\u898b","color":"cccccc"}
                     {"id":"526b81c305a91451ea00000e","name":"platform/chromium","color":"e7f7e7"}
+                    {"id":"526b81c305a91451eb00000e","name":"platform/chromium/google-chrome","color":"e7f7e7"}
+                    {"id":"526b81c305a91451eb00000g","name":"platform/chromium/chromium","color":"e7f7e7"}
                     {"id":"526b81c305a91451ea00000f","name":"platform/node-js","color":"e7f7e7"}
                     {"id":"526b81c305a91451ea000011","name":"work/\u6539\u5584","color":"84b6eb"}
                     {"id":"526b81c305a91451ea000012","name":"site/2ch","color":"f7e7e7"}
@@ -86,7 +93,7 @@ define(
                   loop_func = ->
                     if json_obj.length
                       labels.create(
-                        new Label.Models.Label json_obj.shift()
+                        new MockLabel json_obj.shift()
                       )
                       setTimeout loop_func, 250
                     else
@@ -96,7 +103,9 @@ define(
                 "sync"
                 update_func
               )
-            labels.fetch()
+            labels.fetch(
+              cache: false
+            )
           0
         )
 )

@@ -21,9 +21,9 @@ module.exports = (grunt)->
         files: [
           {
             expand: true
-            cwd: "./src/coffee/"
+            cwd: "src/coffee/"
             src: "**/*.coffee"
-            dest: "./lib/server/static/lib/app/js/"
+            dest: "tmp/lib/app/js/"
             ext: ".js"
           }
         ]
@@ -32,10 +32,17 @@ module.exports = (grunt)->
   _(init_config).extend
     clean:
       "build": [
-        "lib/server/static"
+        "lib/server/static/lib/app/js/"
       ]
       "after-build": [
-        "lib/server/static/lib/app/js/*"
+        "tmp/lib/*"
+      ]
+
+  # touch
+  _(init_config).extend
+    touch:
+      "build": [
+        "./lib/server/static/lib/app/js/main.js"
       ]
 
   # copy
@@ -71,13 +78,10 @@ module.exports = (grunt)->
       "build":
         options:
           findNestedDependencies: true
-          baseUrl: "lib/server/static/lib"
+          baseUrl: "tmp/lib/"
           name: "app/main"
-          mainConfigFile: "lib/server/static/lib/app/js/config.js"
+          mainConfigFile: "tmp/lib/app/js/config.js"
           out: "tmp/main.js"
-          packages: [
-            "test"
-          ]
           paths:
             # components
             "jquery": "empty:"

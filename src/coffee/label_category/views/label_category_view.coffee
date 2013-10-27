@@ -22,51 +22,50 @@ define(
         @model.on(
           "parsed"
           =>
+            @build_dom()
             @render()
+            @$el.children(".category").remove()
         )
 
       has_cid: (cid)->
         !! @$el.find("[data-label-category-cid=\"#{cid}\"]").length
 
+      build_dom: =>
+        childrens = @model.get "childrens"
+        if _(childrens).keys().length
+          childrens_element = @$el.children(".childrens")
+          if ! @$el.children(".childrens").length
+            childrens_element = $("<div class='childrens'></div>")
+            @$el.append childrens_element
+          _(childrens).each (child_model)=>
+            unless @has_cid child_model.cid
+              child_view = new LabelCategoryView(
+                model: child_model
+              )
+              child_element = child_view.render().$el
+              childrens_element.append child_element
+              child_element.data "view", child_view
+            child_view = @$el.find("[data-label-category-cid=\"#{child_model.cid}\"]").data "view"
+            child_view.build_dom()
+
       render: ->
-        unless @has_cid(@model.cid)
-          if @model.is_leaf()
-            label_view = new Label.Views.LabelView(
-              model: @model.get "label_model"
-            )
-            @$el.append(
-              "<div " +
-              "data-label-category-cid='#{@model.cid}' " +
-              ">" +
-              "</div>"
-            )
-            @$el.find("[data-label-category-cid='#{@model.cid}']").append label_view.render().el
-          else
-            @$el.append(
-              "<div " +
-              "data-label-category-cid='#{@model.cid}' " +
-              "class='label-child-category-view'" +
-              ">" +
-              "<div class='category'>" +
-              "<div class='name'>#{@model.get("name")}</div> " +
-              "<div class='controllers'>" + @render_controllers() + "</div> " +
-              "<div class='clearfix'></div>"
-              "</div>" +
-              "</div>"
-            )
-            base_element = @$el.find "[data-label-category-cid=\"#{@model.cid}\"]"
-            childrens = @model.get "childrens"
-            _(childrens).each (child_model)=>
-              unless !! base_element.find("[data-label-category-cid=\"#{child_model.cid}\"]").length
-                child_view = new LabelCategoryView(
-                  model: child_model
-                )
-                base_element.append child_view.render().el
+        @$el.attr "data-label-category-cid", @model.cid
+        if @model.is_leaf()
+          label_view = new Label.Views.LabelView(
+            model: @model.get "label_model"
+          )
+          @$el.append label_view.render().el
+        else
+          @$el.append(
+            "<div class='category'>" +
+            "<div class='name'>#{@model.get "name"}</div>" +
+            "<div class='controllers'>#{@render_controllers()}</div>" +
+            "<div class='clearfix'></div>" +
+            "</div>"
+          )
         @
 
       render_controllers: ->
-        "<div>" +
         "<button class='btn btn-xs btn-warning disabled'>edit</button> " +
-        "<button class='btn btn-xs btn-danger disabled'>remove</button>" +
-        "</div>"
+        "<button class='btn btn-xs btn-danger disabled'>remove</button>"
 )

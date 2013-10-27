@@ -16,8 +16,10 @@ module.exports = (grunt)->
           enabled: true
           port: process.env['GILM_LIVERELOAD_PORT'] || process.env['LIVERELOAD_PORT']
           extensions: ['js', 'css']
+
       'scss': (path) =>
         ["compass:build"]
+
       'coffee': (path) =>
         if path.match(/^spec\/src\/coffee\//)
           ['test']
@@ -26,13 +28,15 @@ module.exports = (grunt)->
             expand: true
             cwd: "./src/coffee"
             src: path.match(/^src\/coffee\/(.*)/)[1]
-            dest: "./lib/server/static/lib/app/js/"
+            dest: "./tmp/lib/app/js/"
             ext: ".js"
           ]
           grunt.config ['coffee', 'update', 'files'], files
           [
             'coffee:update'
             'requirejs:build'
+            'copy:after-build'
+            'touch:build'
           ]
         else
           []

@@ -5,7 +5,7 @@ define(
     "backbone"
     "app/common"
     "app/page"
-    "com/jquery/jquery.pjax"
+    "app/mock"
   ]
   (
     _
@@ -13,12 +13,14 @@ define(
     Backbone
     Common
     Page
+    Mock
   )->
     class ApplicationRouter extends Backbone.Router
       initialize: (options)->
         @page_view = undefined
         @container_id = "#container_id"
         @side_id = "#side_id"
+        Common.Utils.get_root().api_url_prefix = ""
         $(document).on(
           'click',
           'a.pjaxable',
@@ -35,6 +37,7 @@ define(
         "repos/:github_user_id/:github_repo_name": "show_repo"
         "user_status": "show_user_status"
         "MIT-LICENSE.:suffix": "show_mit_license"
+        "mock/repos/sh19910711/js2ch": "show_repo_mock"
 
       show_index: ->
         @load_contents "/"
@@ -65,6 +68,15 @@ define(
             github_repo_name: github_repo_name
         )
         @load_contents "/repos/#{github_user_id}/#{github_repo_name}"
+
+      show_repo_mock: ->
+        Mock.init()
+        @page_view = new Page.Views.UserRepoView(
+          labels:
+            github_user_id: "sh19910711"
+            github_repo_name: "js2ch"
+        )
+        @load_contents "/mock/repos/sh19910711/js2ch"
 
       load_contents: (path)->
         $.pjax(

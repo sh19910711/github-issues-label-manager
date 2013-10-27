@@ -9,11 +9,18 @@ requirejs(
     requirejs(
       [
         "jquery"
-        "com/bootstrap/bootstrap"
-        "app/common"
+        "backbone"
         "app/application"
+        "com/bootstrap/bootstrap"
+        "com/backbone/backbone-localstorage"
+        "com/backbone/backbone-fetch-cache"
+        "com/jquery/jquery.pjax"
       ]
-      ($, dummy1, Common, Application)->
+      (
+        $
+        Backbone
+        Application
+      )->
         $(
           ->
             # app
@@ -31,7 +38,6 @@ requirejs(
             Backbone.history.start(
               pushState: true
             )
-
         )
     )
 )

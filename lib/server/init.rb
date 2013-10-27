@@ -47,6 +47,8 @@ module Server
           "GET:/api/label/.*",
           "PUT:/api/label/.*",
           "DELETE:/api/label/.*",
+          # mock
+          "POST:/mock/api/label"
         ]
       }
 

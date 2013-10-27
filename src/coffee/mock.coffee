@@ -42,7 +42,7 @@ define(
         )
         setTimeout(
           ->
-            if ( ! current_version ) || ( parseFloat(current_version) < parseFloat(real_version) )
+            if ( ! current_version ) || Common.Utils.compare_version(current_version, real_version)
               # init storage
               update_func = ->
                 labels.off "sync", update_func

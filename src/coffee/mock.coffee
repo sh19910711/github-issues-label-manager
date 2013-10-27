@@ -11,11 +11,10 @@ define(
   )->
     class Mock
       @init: ->
-        _(Label.Models.Label::).extend(
-          urlRoot: =>
+        _(Label.Models.Label::).extend
+          urlRoot: ->
             "/mock/api/label"
-        )
         _(Labels.Collections.Labels::).extend
-          url: =>
+          url: ->
             "/mock/api/labels/#{@github_user_id}/#{@github_repo_name}"
 )

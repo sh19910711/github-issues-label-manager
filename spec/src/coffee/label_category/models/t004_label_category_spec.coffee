@@ -1,17 +1,18 @@
 should = require "should"
 
 describe "T004: LabelCategory::Models::LabelCategory", ->
-  beforeEach ->
+  before ->
     @LabelCategory = requirejs "app/label_category"
     @Label         = requirejs "app/label"
 
-    # set root node
-    @root = new @LabelCategory.Models.LabelCategory
-    @fake_label =
-      set:  sinon.spy()
-      on:   sinon.spy()
-
   context "001: parsing", ->
+    beforeEach ->
+      # set root node
+      @root = new @LabelCategory.Models.LabelCategory
+      @fake_label =
+        set:  sinon.spy()
+        on:   sinon.spy()
+
     context "001: test1/test2/test3", ->
       beforeEach ->
         @root.parse_labels_recursive_func "test1/test2/test3", @fake_label
@@ -63,10 +64,30 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @root.get("childrens")["b"].get("childrens")["a"].get("childrens")["a"].get("name").should.equal "a"
 
   context "002: properties", ->
+    beforeEach ->
+      @root = new @LabelCategory.Models.LabelCategory
+
     context "001: root", ->
       beforeEach ->
         @root.set "name", "this is root"
 
-      it "001 get name", ->
+      it "001: get name", ->
         @root.get("name").should.equal "this is root"
+
+  context "003: label watching", ->
+    beforeEach ->
+      @label = new @Label.Models.Label(
+        name: "this is label"
+        color: "777777"
+      )
+      @root = new @LabelCategory.Models.LabelCategory()
+
+    context "001: destroy", ->
+      it "001: destroy with label", ->
+        destroy_event_spy = sinon.spy()
+        @root.set_label @label
+        @label.destroy()
+        should.strictEqual @root.get("label"), undefined
+
+
 

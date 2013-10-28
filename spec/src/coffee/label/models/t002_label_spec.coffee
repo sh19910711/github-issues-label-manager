@@ -1,4 +1,4 @@
-describe "T002: Label", ->
+describe "T002: Label::Models::Label", ->
   beforeEach (done)->
     requirejs(
       [
@@ -60,8 +60,8 @@ describe "T002: Label", ->
       args[0].url = "http://localhost:8888#{args[0].url}"
       jQuery.ajax.apply @, args
 
-  describe "001: name", ->
-    describe "001: event", ->
+  context "001: name", ->
+    context "001: event", ->
       beforeEach ->
         @spy = sinon.spy()
 
@@ -137,8 +137,8 @@ describe "T002: Label", ->
             )
         )
 
-  describe "002: color", ->
-    describe "001: event", ->
+  context "002: color", ->
+    context "001: event", ->
       beforeEach ->
         @spy = sinon.spy()
 

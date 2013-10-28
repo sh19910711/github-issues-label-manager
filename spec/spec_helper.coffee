@@ -1,9 +1,10 @@
 _ = require "underscore"
+
 _(global).extend
   jQuery: require "jquery"
   window:
     jQuery: require "jquery"
-  underscore: require "underscore"
+  _: require "underscore"
   backbone: require "backbone"
   documentElement: {}
   requirejs: require "requirejs"
@@ -23,6 +24,7 @@ requirejs.config(
     "app/page": "tmp/lib/app/js/page"
     "app/labels": "tmp/lib/app/js/labels"
     "app/label": "tmp/lib/app/js/label"
+    "app/label_category": "tmp/lib/app/js/label_category"
     # components
     "com/jquery/jquery.pjax":             "lib/server/static/lib/com/jquery-pjax/js/jquery.pjax"
     "com/bootstrap/bootstrap":            "lib/server/static/lib/com/bootstrap/js/bootstrap"

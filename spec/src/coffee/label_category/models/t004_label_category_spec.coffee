@@ -47,6 +47,21 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         should.strictEqual @root.get("childrens")["test1"].get("childrens")["test201"], undefined
         _(@root.get("childrens")["test1"].get("childrens")).keys().length.should.equal 200 - 2
 
+    context "003: multi a/a/a a/a/b a/b/a a/b/c b/a/a", ->
+      beforeEach ->
+        @root.parse_labels_recursive_func "a/a/a", @fake_label
+        @root.parse_labels_recursive_func "a/a/b", @fake_label
+        @root.parse_labels_recursive_func "a/b/a", @fake_label
+        @root.parse_labels_recursive_func "a/b/c", @fake_label
+        @root.parse_labels_recursive_func "b/a/a", @fake_label
+
+      it "001: check name", ->
+        @root.get("childrens")["a"].get("childrens")["a"].get("childrens")["a"].get("name").should.equal "a"
+        @root.get("childrens")["a"].get("childrens")["a"].get("childrens")["b"].get("name").should.equal "b"
+        @root.get("childrens")["a"].get("childrens")["b"].get("childrens")["a"].get("name").should.equal "a"
+        @root.get("childrens")["a"].get("childrens")["b"].get("childrens")["c"].get("name").should.equal "c"
+        @root.get("childrens")["b"].get("childrens")["a"].get("childrens")["a"].get("name").should.equal "a"
+
   context "002: properties", ->
     context "001: root", ->
       beforeEach ->

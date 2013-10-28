@@ -14,7 +14,7 @@ define(
     Label
   )->
     class LabelCategory extends Backbone.Model
-      defaults:
+      defaults: ->
         name: ""
         childrens: {}
         label: undefined

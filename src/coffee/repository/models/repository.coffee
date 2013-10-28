@@ -12,7 +12,7 @@ define(
     Common
   )->
     class Repository extends Backbone.Model
-      defaults:
+      defaults: ->
         full_name: ""
         id: ""
         name: ""

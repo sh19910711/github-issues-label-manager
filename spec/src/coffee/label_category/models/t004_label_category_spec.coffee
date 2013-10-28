@@ -89,5 +89,41 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @label.destroy()
         should.strictEqual @root.get("label"), undefined
 
+  context "004: get_label_text()", ->
+    beforeEach ->
+      @root = new @LabelCategory.Models.LabelCategory()
+      @fake_label =
+        set:  sinon.spy()
+        on:   sinon.spy()
+
+    context "001: A/B/C/D/E/F/G", ->
+      beforeEach ->
+        @root.parse_labels_recursive_func "A/B/C/D/E/F/G", @fake_label
+
+      it "001: simple", ->
+        @root.get_label_text().should.equal ""
+        @root.get("childrens")["A"].get_label_text().should.equal "A"
+        @root.get("childrens")["A"].get("childrens")["B"].get_label_text().should.equal "A/B"
+        @root.get("childrens")["A"].get("childrens")["B"].get("childrens")["C"].get_label_text().should.equal "A/B/C"
+
+      it "002: use parent", ->
+        @root
+          .get("childrens")["A"]
+          .get("childrens")["B"]
+          .get("childrens")["C"]
+          .get("childrens")["D"]
+          .get("parent")
+          .get_label_text().should.equal "A/B/C"
+        @root
+          .get("childrens")["A"]
+          .get("childrens")["B"]
+          .get("childrens")["C"]
+          .get("childrens")["D"]
+          .get("parent")
+          .get("childrens")["D"]
+          .get("childrens")["E"]
+          .get("childrens")["F"]
+          .get("childrens")["G"]
+          .get_label_text().should.equal "A/B/C/D/E/F/G"
 
 

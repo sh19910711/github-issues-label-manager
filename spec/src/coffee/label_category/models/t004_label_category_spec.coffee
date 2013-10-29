@@ -4,6 +4,17 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
   before ->
     @LabelCategory = requirejs "app/label_category"
     @Label         = requirejs "app/label"
+    nock("http://localhost:8888")
+      .intercept("/api/label", "POST")
+      .reply(
+        200
+        (url, body)->
+          type: "post"
+      )
+    backbone.ajax = ->
+      args = Array.prototype.slice.call arguments
+      args[0].url = "http://localhost:8888#{args[0].url}"
+      jQuery.ajax.apply @, args
 
   context "A001: parsing", ->
     beforeEach ->
@@ -153,6 +164,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
       @fake_label =
         spy: sinon.spy()
         on:  sinon.spy()
+        set: sinon.spy()
 
     context "B001: A/B/C/D/E", ->
       beforeEach ->
@@ -171,6 +183,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
           .parent()
           .parent()
           .parent()
+          .children("B")
           .children("C")
           .children("D")
           .children("E")
@@ -186,6 +199,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
       @fake_label =
         spy: sinon.spy()
         on:  sinon.spy()
+        set: sinon.spy()
 
     context "B001: destroy with no child", ->
       beforeEach ->
@@ -213,7 +227,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
 
     context "B002: renamed child label", ->
       beforeEach ->
-        @label = new Label.Models.Label(
+        @label = new @Label.Models.Label(
           name: "1/1/1"
         )
         @root.parse_labels_recursive_func @label.get("name"), @label
@@ -223,7 +237,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @label.save(
           name: "1/2/1"
         ).done(
-          ->
+          =>
             should.strictEqual @root.children("1").children("1"), undefined
             @root.children("1").children("2").children("1").get("name").should.equal "1"
             done()
@@ -234,7 +248,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @label.save(
           name: "1/1/2"
         ).done(
-          ->
+          =>
             should.strictEqual @root.children("1").children("1").children("1"), undefined
             @root.children("1").children("1").children("2").get("name").should.equal "2"
             done()

@@ -18,6 +18,10 @@ define(
         name: ""
         childrens: {}
         label: undefined
+        parent: undefined
+
+      toJSON: ->
+        name: @get "name"
 
       initialize: ->
 
@@ -35,27 +39,31 @@ define(
 
         # create new node
         unless _(childrens).has(category_name)
-          childrens[category_name] = new LabelCategory(
+          children = new LabelCategory(
             name: category_name
             childrens: {}
+            parent: @
           )
-          childrens[category_name].on(
+          children.on(
             "destroy"
             =>
               delete childrens[category_name]
               unless _(childrens).keys().length || @get("label")
                 @destroy()
           )
+          childrens[category_name] = children
           @set "childrens", childrens
 
         # is leaf
         unless /\//.test label_name
           childrens[category_name].set "label", label
-          label.set "label_category", childrens[category_name]
+          # label.set "label_category", childrens[category_name]
           label.on(
             "change"
             (target)=>
-              delete childrens[category_name]
+              root = @root()
+              @destroy()
+              root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
             "remove"
@@ -67,5 +75,35 @@ define(
         # rec
         childrens[category_name].parse_labels_recursive_func.call childrens[category_name], next_label_name, label
 
+      set_label: (label)->
+        @set "label", label
+        label.on(
+          "destroy"
+          =>
+            childrens = @get "childrens"
+            unless _(childrens).keys().length
+              @destroy()
+            @set "label", undefined
+        )
+
+      children: (category_name)->
+        @get("childrens")[category_name]
+
+      parent: ->
+        @get("parent")
+
+      root: ->
+        cur = @
+        while cur.parent()
+          cur = cur.parent()
+        cur
+
+      get_label_text: ->
+        parents = []
+        cur = @
+        while cur.parent()
+          parents.push cur.get("name")
+          cur = cur.parent()
+        parents.reverse().join('/')
 )
 

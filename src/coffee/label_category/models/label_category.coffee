@@ -61,9 +61,9 @@ define(
           label.on(
             "change"
             (target)=>
-              delete childrens[category_name]
-              console.log "after change parse start", target
-              @parse_labels_recursive_func target.get("name"), target
+              root = @root()
+              @destroy()
+              root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
             "remove"
@@ -91,6 +91,12 @@ define(
 
       parent: ->
         @get("parent")
+
+      root: ->
+        cur = @
+        while cur.parent()
+          cur = cur.parent()
+        cur
 
       get_label_text: ->
         parents = []

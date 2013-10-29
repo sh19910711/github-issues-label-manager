@@ -229,3 +229,14 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
             done()
         )
 
+      it "C002: same on", (done)->
+        @root.children("1").children("1").children("1").get("name").should.equal "1"
+        @label.save(
+          name: "1/1/2"
+        ).done(
+          ->
+            should.strictEqual @root.children("1").children("1").children("1"), undefined
+            @root.children("1").children("1").children("2").get("name").should.equal "2"
+            done()
+        )
+

@@ -14,9 +14,20 @@ define(
     class Label extends Backbone.Model
       urlRoot: ->
         "/api/label"
-      defaults:
+      defaults: ->
         name: ""
         color: "#333333"
+
+      toJSON: ->
+        _(_(@attributes).keys()).reject(
+          (key)=>
+            key == "label_category"
+        ).reduce(
+          (res, key)=>
+            res[key] = @get key
+            res
+          {}
+        )
 
       initialize: (options)->
         @set "color", @resolve_color_code @get "color"

@@ -28,8 +28,6 @@ define(
 
       update_user_repos: ()=>
         @repositories.fetch
-          data:
-            csrf_token: Common.Utils.get_csrf_token()
 
       render: ()=>
         @$el.append(

@@ -1,6 +1,7 @@
 _ = require "underscore"
 
 _(global).extend
+  $: require "jquery"
   jQuery: require "jquery"
   window:
     jQuery: require "jquery"

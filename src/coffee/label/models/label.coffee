@@ -18,6 +18,10 @@ define(
         name: ""
         color: "#333333"
 
+      toJSON: ->
+        name: @get "name"
+        color: @get "color"
+
       initialize: (options)->
         @set "color", @resolve_color_code @get "color"
         @on "change", =>

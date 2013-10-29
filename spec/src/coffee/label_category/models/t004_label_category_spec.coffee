@@ -211,4 +211,21 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @root.children("1").children("1").children("5").destroy()
         destroy_event_spy.called.should.equal true
 
+    context "B002: renamed child label", ->
+      beforeEach ->
+        @label = new Label.Models.Label(
+          name: "1/1/1"
+        )
+        @root.parse_labels_recursive_func @label.get("name"), @label
+
+      it "C001: child away", (done)->
+        @root.children("1").children("1").children("1").get("name").should.equal "1"
+        @label.save(
+          name: "1/2/1"
+        ).done(
+          ->
+            should.strictEqual @root.children("1").children("1"), undefined
+            @root.children("1").children("2").children("1").get("name").should.equal "1"
+            done()
+        )
 

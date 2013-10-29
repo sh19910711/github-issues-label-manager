@@ -12,7 +12,7 @@ _(global).extend
   nock: require "nock"
 
 requirejs.config(
-  baseUrl: "/home/dev/workspace/github-issues-label-manager"
+  baseUrl: "./"
   paths:
     # app
     "app/main": "tmp/lib/app/js/main"

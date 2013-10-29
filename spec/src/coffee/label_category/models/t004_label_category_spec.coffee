@@ -153,6 +153,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
       @fake_label =
         spy: sinon.spy()
         on:  sinon.spy()
+        set: sinon.spy()
 
     context "B001: A/B/C/D/E", ->
       beforeEach ->
@@ -186,6 +187,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
       @fake_label =
         spy: sinon.spy()
         on:  sinon.spy()
+        set: sinon.spy()
 
     context "B001: destroy with no child", ->
       beforeEach ->
@@ -213,7 +215,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
 
     context "B002: renamed child label", ->
       beforeEach ->
-        @label = new Label.Models.Label(
+        @label = new @Label.Models.Label(
           name: "1/1/1"
         )
         @root.parse_labels_recursive_func @label.get("name"), @label

@@ -199,10 +199,15 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
       it "C001: check", ->
         destroy_event_spy = sinon.spy()
         @root.on "destroy", destroy_event_spy
+        destroy_event_spy.called.should.equal false
         @root.children("1").children("1").children("1").destroy()
+        destroy_event_spy.called.should.equal false
         @root.children("1").children("1").children("2").destroy()
+        destroy_event_spy.called.should.equal false
         @root.children("1").children("1").children("3").destroy()
+        destroy_event_spy.called.should.equal false
         @root.children("1").children("1").children("4").destroy()
+        destroy_event_spy.called.should.equal false
         @root.children("1").children("1").children("5").destroy()
         destroy_event_spy.called.should.equal true
 

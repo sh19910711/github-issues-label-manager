@@ -89,7 +89,7 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
         @label.destroy()
         should.strictEqual @root.get("label"), undefined
 
-  context "004: get_label_text()", ->
+  context "004: #get_label_text()", ->
     beforeEach ->
       @root = new @LabelCategory.Models.LabelCategory()
       @fake_label =
@@ -125,5 +125,85 @@ describe "T004: LabelCategory::Models::LabelCategory", ->
           .get("childrens")["F"]
           .get("childrens")["G"]
           .get_label_text().should.equal "A/B/C/D/E/F/G"
+
+  context "005: #children()", ->
+    beforeEach ->
+      @root = new @LabelCategory.Models.LabelCategory
+      @fake_label =
+        set: sinon.spy()
+        on:  sinon.spy()
+
+    context "001: A/B/C/D/E", ->
+      beforeEach ->
+        @root.parse_labels_recursive_func "A/B/C/D/E", @fake_label
+
+      it "001: get target category", ->
+        @root.children("A").get("name").should.equal "A"
+        @root.children("A").children("B").get("name").should.equal "B"
+        @root.children("A").children("B").children("C").get("name").should.equal "C"
+        @root.children("A").children("B").children("C").children("D").get("name").should.equal "D"
+        @root.children("A").children("B").children("C").children("D").children("E").get("name").should.equal "E"
+
+      it "002: is not found", ->
+        should.strictEqual @root.children("B"), undefined
+
+  context "006: #parent()", ->
+    beforeEach ->
+      @root = new @LabelCategory.Models.LabelCategory
+      @fake_label =
+        spy: sinon.spy()
+        on:  sinon.spy()
+
+    context "001: A/B/C/D/E", ->
+      beforeEach ->
+        @root.parse_labels_recursive_func "A/B/C/D/E", @fake_label
+        
+      it "001: #parent", ->
+        @root.children("A").parent().children("A").get("name").should.equal "A"
+        @root.children("A").children("B").children("C").parent().parent().get("name").should.equal "A"
+        @root
+          .children("A")
+          .children("B")
+          .children("C")
+          .children("D")
+          .children("E")
+          .parent()
+          .parent()
+          .parent()
+          .parent()
+          .children("C")
+          .children("D")
+          .children("E")
+          .parent()
+          .get("name").should.equal "D"
+
+      it "002: root's parent is undefined", ->
+        should.strictEqual @root.parent(), undefined
+
+  context "007: childrens watching", ->
+    beforeEach ->
+      @root = new @LabelCategory.Models.LabelCategory
+      @fake_label =
+        spy: sinon.spy()
+        on:  sinon.spy()
+
+    context "001: destroy with no child", ->
+      beforeEach ->
+        @root.parse_labels_recursive_func "1/1/1", @fake_label
+        @root.parse_labels_recursive_func "1/1/2", @fake_label
+        @root.parse_labels_recursive_func "1/1/3", @fake_label
+        @root.parse_labels_recursive_func "1/1/4", @fake_label
+        @root.parse_labels_recursive_func "1/1/5", @fake_label
+        # TODO: can it check fake_labels' destroy count?
+
+      it "001: check", ->
+        destroy_event_spy = sinon.spy()
+        @root.on "destroy", destroy_event_spy
+        @root.children("1").children("1").children("1").destroy()
+        @root.children("1").children("1").children("2").destroy()
+        @root.children("1").children("1").children("3").destroy()
+        @root.children("1").children("1").children("4").destroy()
+        @root.children("1").children("1").children("5").destroy()
+        destroy_event_spy.called.should.equal true
 
 

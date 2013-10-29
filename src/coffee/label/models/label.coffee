@@ -14,7 +14,7 @@ define(
     class Label extends Backbone.Model
       urlRoot: ->
         "/api/label"
-      defaults:
+      defaults: ->
         name: ""
         color: "#333333"
 

@@ -67,5 +67,16 @@ define(
         # rec
         childrens[category_name].parse_labels_recursive_func.call childrens[category_name], next_label_name, label
 
+      set_label: (label)->
+        @set "label", label
+        label.on(
+          "destroy"
+          =>
+            childrens = @get "childrens"
+            unless _(childrens).keys().length
+              @destroy()
+            @set "label", undefined
+        )
+
 )
 

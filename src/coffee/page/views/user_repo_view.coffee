@@ -37,7 +37,7 @@ define(
         )
         @labels.on(
           "sync"
-          ()=>
+          (target)=>
             @label_category.parse_labels @labels
         )
         @labels.fetch(
@@ -66,10 +66,10 @@ define(
           wrapper
         @
 
-      event_update_labels: ()=>
+      event_update_labels: ()->
         @labels_view.collection.fetch_new_labels()
 
-      event_add_label: ()=>
+      event_add_label: ()->
         label_name = $("input#new-label-name").val()
         @labels.add_label(
           name: label_name

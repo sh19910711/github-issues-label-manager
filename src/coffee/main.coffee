@@ -33,6 +33,7 @@ requirejs(
               _(data).extend
                 csrf_token: Common.Utils.get_csrf_token()
               options.data = JSON.stringify data
+            options
         )
         $(
           ->
@@ -46,9 +47,8 @@ requirejs(
             app =
               router: new Application.Routers.ApplicationRouter()
             # push state
-            Backbone.history.start(
+            Backbone.history.start
               pushState: true
-            )
         )
     )
 )

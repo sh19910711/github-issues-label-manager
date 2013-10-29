@@ -19,8 +19,15 @@ define(
         color: "#333333"
 
       toJSON: ->
-        name: @get "name"
-        color: @get "color"
+        _(_(@attributes).keys()).reject(
+          (key)=>
+            key == "label_category"
+        ).reduce(
+          (res, key)=>
+            res[key] = @get key
+            res
+          {}
+        )
 
       initialize: (options)->
         @set "color", @resolve_color_code @get "color"

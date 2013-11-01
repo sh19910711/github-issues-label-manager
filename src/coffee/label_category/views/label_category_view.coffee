@@ -28,7 +28,8 @@ define(
         @model.on(
           "destroy"
           =>
-            @$el.remove()
+            @$el.empty()
+            @remove()
         )
 
       has_cid: (cid)->

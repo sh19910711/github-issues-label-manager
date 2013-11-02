@@ -12,6 +12,8 @@ _(global).extend
   sinon: require "sinon"
   nock: require "nock"
 
+backbone.$ = jQuery
+
 requirejs.config(
   baseUrl: "./"
   paths:

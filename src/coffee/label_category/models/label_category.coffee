@@ -47,33 +47,49 @@ define(
           children.on(
             "destroy"
             =>
-              delete childrens[category_name]
-              unless _(childrens).keys().length || @get("label")
-                @destroy()
+              if _(children.get("childrens")).keys().length > 0
+                children.get("label").destroy() if children.get("label")
+              else
+                delete childrens[category_name]
+                unless _(childrens).keys().length || @get("label")
+                  @destroy()
           )
           childrens[category_name] = children
           @set "childrens", childrens
 
         # is leaf
         unless /\//.test label_name
-          childrens[category_name].set "label", label
+          childrens[category_name].set_label label
           # label.set "label_category", childrens[category_name]
           label.on(
             "change"
             (target)=>
               root = @root()
-              @destroy()
-              root.parse_labels_recursive_func target.get("name"), target
+              if target.get("name") != target.previous("name")
+                prev_name = target.previous("name")
+                removed_label = root.query(prev_name)
+                removed_label.destroy()
+                root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
-            "remove"
+            "destroy"
             =>
               childrens[category_name].destroy() if childrens[category_name]?
           )
+          @root().trigger "parsed"
           return null
 
         # rec
         childrens[category_name].parse_labels_recursive_func.call childrens[category_name], next_label_name, label
+
+      query: (label_name)->
+        # label_name example: "category/..."
+        category_name = if /\//.test(label_name) then label_name.match(/([^\/]*)\//)[1] else label_name
+        next_label_name = label_name.substring category_name.length + 1
+        unless /\//.test label_name
+          @children(category_name)
+        else
+          @children(category_name).query(next_label_name)
 
       set_label: (label)->
         @set "label", label

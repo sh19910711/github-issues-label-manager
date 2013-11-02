@@ -47,9 +47,13 @@ define(
           children.on(
             "destroy"
             =>
-              delete childrens[category_name]
-              unless _(childrens).keys().length || @get("label")
-                @destroy()
+              if _(children.get("childrens")).keys().length > 0
+                delete children.get("label")
+                children.set "label", undefined
+              else
+                delete childrens[category_name]
+                unless _(childrens).keys().length || @get("label")
+                  @destroy()
           )
           childrens[category_name] = children
           @set "childrens", childrens
@@ -62,8 +66,11 @@ define(
             "change"
             (target)=>
               root = @root()
-              @destroy()
-              root.parse_labels_recursive_func target.get("name"), target
+              if target.get("name") != target.previous("name")
+                prev_name = target.previous("name")
+                removed_label = root.query(prev_name)
+                removed_label.destroy()
+                root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
             "remove"
@@ -75,6 +82,15 @@ define(
 
         # rec
         childrens[category_name].parse_labels_recursive_func.call childrens[category_name], next_label_name, label
+
+      query: (label_name)->
+        # label_name example: "category/..."
+        category_name = if /\//.test(label_name) then label_name.match(/([^\/]*)\//)[1] else label_name
+        next_label_name = label_name.substring category_name.length + 1
+        unless /\//.test label_name
+          return @children(category_name)
+        else
+          return @children(category_name).query(next_label_name)
 
       set_label: (label)->
         @set "label", label

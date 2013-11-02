@@ -61,7 +61,7 @@ define(
       render: =>
         if $("[data-label-category-cid=\"#{@model.cid}\"]").size()
           unless @model.get("label")
-            unless @$(".category").size()
+            unless @$el.children(".category").size()
               @$el.prepend(
                 "<div class='category'>" +
                 "<div class='name'>#{@model.get "name"}</div>" +
@@ -79,7 +79,7 @@ define(
               )
               @$el.append label_view.render().el
           else
-            @$el.append(
+            @$el.prepend(
               "<div class='category'>" +
               "<div class='name'>#{@model.get "name"}</div>" +
               "<div class='controllers'>#{@render_controllers()}</div>" +

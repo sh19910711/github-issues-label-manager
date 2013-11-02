@@ -72,7 +72,7 @@ define(
                 root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
-            "remove"
+            "destroy"
             =>
               childrens[category_name].destroy() if childrens[category_name]?
           )

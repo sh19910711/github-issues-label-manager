@@ -32,3 +32,4 @@ describe "T005: LabelCategory::Views::LabelCategoryView", ->
         @root.parse_labels_recursive_func @label.get("name"), @label
         @category_view.$(".childrens .childrens .childrens .name").text().should.equal "C"
 
+

@@ -70,6 +70,7 @@ define(
             =>
               childrens[category_name].destroy() if childrens[category_name]?
           )
+          @root().trigger "parsed"
           return null
 
         # rec

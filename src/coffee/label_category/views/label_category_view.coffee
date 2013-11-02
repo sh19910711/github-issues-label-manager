@@ -28,8 +28,11 @@ define(
         @model.on(
           "destroy"
           =>
-            @$el.empty()
-            @remove()
+            unless _(@model.get("childrens")).keys().length > 0
+              @$el.empty()
+              @remove()
+            else
+              @render()
         )
 
       has_cid: (cid)->
@@ -56,23 +59,34 @@ define(
             child_view.build_dom()
 
       render: =>
-        @$el.attr "data-label-category-cid", @model.cid
-        if @model.get("label")
-          label = @model.get("label")
-          unless @$el.find("[data-label-cid=\"#{label.cid}\"]").length
-            label_view = new Label.Views.LabelView(
-              model: label
-            )
-            @$el.append label_view.render().el
+        if $("[data-label-category-cid=\"#{@model.cid}\"]").size()
+          unless @model.get("label")
+            unless @$(".category").size()
+              @$el.prepend(
+                "<div class='category'>" +
+                "<div class='name'>#{@model.get "name"}</div>" +
+                "<div class='controllers'>#{@render_controllers()}</div>" +
+                "<div class='clearfix'></div>" +
+                "</div>"
+              )
         else
-          @$el.append(
-            "<div class='category'>" +
-            "<div class='name'>#{@model.get "name"}</div>" +
-            "<div class='controllers'>#{@render_controllers()}</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>"
-          )
-        @
+          @$el.attr "data-label-category-cid", @model.cid
+          if @model.get("label")
+            label = @model.get("label")
+            unless @$el.find("[data-label-cid=\"#{label.cid}\"]").length
+              label_view = new Label.Views.LabelView(
+                model: label
+              )
+              @$el.append label_view.render().el
+          else
+            @$el.append(
+              "<div class='category'>" +
+              "<div class='name'>#{@model.get "name"}</div>" +
+              "<div class='controllers'>#{@render_controllers()}</div>" +
+              "<div class='clearfix'></div>" +
+              "</div>"
+            )
+          @
 
       render_controllers: ->
         "<button class='btn btn-xs btn-warning disabled'>edit</button> " +

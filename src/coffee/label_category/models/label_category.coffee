@@ -87,9 +87,9 @@ define(
         category_name = if /\//.test(label_name) then label_name.match(/([^\/]*)\//)[1] else label_name
         next_label_name = label_name.substring category_name.length + 1
         unless /\//.test label_name
-          return @children(category_name)
+          @children(category_name)
         else
-          return @children(category_name).query(next_label_name)
+          @children(category_name).query(next_label_name)
 
       set_label: (label)->
         @set "label", label

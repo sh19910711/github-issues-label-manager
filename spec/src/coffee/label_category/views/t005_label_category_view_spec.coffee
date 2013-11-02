@@ -93,3 +93,42 @@ describe "T005: LabelCategory::Views::LabelCategoryView", ->
         @view.$(".label-view").size().should.equal 1
         @view.$(".label-view").children(".name").text().should.equal "4"
 
+    context "B003: has child child", ->
+      beforeEach ->
+        @root = new @LabelCategory.Models.LabelCategory(
+          name: "root"
+        )
+        @view = new @LabelCategory.Views.LabelCategoryView(
+          model: @root
+        )
+        @label1 = new @Label.Models.Label(
+          name: "1/1/1"
+          color: "CCCCCC"
+        )
+        @label2 = new @Label.Models.Label(
+          name: "1/1/2"
+          color: "CCCCCC"
+        )
+        @label3 = new @Label.Models.Label(
+          name: "1/1/3"
+          color: "CCCCCC"
+        )
+        @label4 = new @Label.Models.Label(
+          name: "1/3/1/1"
+          color: "CCCCCC"
+        )
+        @label5 = new @Label.Models.Label(
+          name: "1/3"
+          color: "CCCCCC"
+        )
+        @root.parse_labels_recursive_func @label1.get("name"), @label1
+        @root.parse_labels_recursive_func @label2.get("name"), @label2
+        @root.parse_labels_recursive_func @label3.get("name"), @label3
+        @root.parse_labels_recursive_func @label4.get("name"), @label4
+        @root.parse_labels_recursive_func @label5.get("name"), @label5
+
+      it "C001: destroy 1/3 label", ->
+        target_category = @root.children("1").children("3")
+        target_category.get("label").destroy()
+        @view.$("[data-label-category-cid=\"#{target_category.cid}\"]").children(".category").children(".name").text().should.equal "3"
+

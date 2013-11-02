@@ -17,6 +17,7 @@ define(
         "app/label_category": "app/js/label_category"
         # components
         "com/jquery/jquery.pjax":             "com/jquery-pjax/js/jquery.pjax"
+        "com/jquery/jquery.ui":               "com/jquery-ui/js/jquery-ui"
         "com/bootstrap/bootstrap":            "com/bootstrap/js/bootstrap"
         "com/backbone/backbone-fetch-cache":  "com/backbone-fetch-cache/js/backbone.fetch-cache"
         "com/backbone/backbone-localstorage": "com/backbone.localStorage/js/backbone.localStorage"

@@ -17,6 +17,7 @@ requirejs(
         "com/backbone/backbone-localstorage"
         "com/backbone/backbone-fetch-cache"
         "com/jquery/jquery.pjax"
+        "com/jquery/jquery.ui"
       ]
       (
         _

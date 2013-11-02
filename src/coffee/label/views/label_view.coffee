@@ -32,7 +32,7 @@ define(
       render: ()=>
         @$el.css "border-left", "3px solid ##{@model.get("color") || "333"}"
         @$el.append =>
-          "<div class=\"name\" style=\"\" class=\"label-view\">" +
+          "<div style=\"\" class=\"name label-view\">" +
           "</div>" +
           "<div class=\"controllers\">" +
           "</div>" +

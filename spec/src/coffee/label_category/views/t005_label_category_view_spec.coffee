@@ -29,11 +29,6 @@ describe "T005: LabelCategory::Views::LabelCategoryView", ->
           name: "A/B/C"
           color: "999999"
         )
-        @label_view = new @Label.Views.LabelView(
-          model: @label
-        )
-        console.log @label_view.render().$el.html()
         @root.parse_labels_recursive_func @label.get("name"), @label
-        @root.trigger "parsed"
-        console.log @category_view.$(".childrens .childrens").html()
+        @category_view.$(".childrens .childrens .childrens .name").text().should.equal "C"
 

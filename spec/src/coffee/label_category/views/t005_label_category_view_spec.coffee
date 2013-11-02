@@ -32,4 +32,29 @@ describe "T005: LabelCategory::Views::LabelCategoryView", ->
         @root.parse_labels_recursive_func @label.get("name"), @label
         @category_view.$(".childrens .childrens .childrens .name").text().should.equal "C"
 
+  context "A002: destroy", ->
+    context "B001: has child", ->
+      beforeEach ->
+        @label = new @Label.Models.Label(
+          name: "A/B/C"
+          color: "999999"
+        )
+        @root = new @LabelCategory.Models.LabelCategory(
+          name: "root"
+        )
+        @view = new @LabelCategory.Views.LabelCategoryView(
+          model: @root
+        )
+        @root.parse_labels_recursive_func "1/1", @label
+        @root.parse_labels_recursive_func "1/1/1", @label
+        @root.parse_labels_recursive_func "1/1/2", @label
+        @root.parse_labels_recursive_func "1/1/3", @label
+        @root.parse_labels_recursive_func "1/2", @label
+
+      it "C001: destroy 1/1", ->
+        @root.children("1").children("1").destroy()
+        @root.children("1").get("name").should.equal "1"
+        @root.children("1").children("1").children("1").get("name").should.equal "1"
+        @root.children("1").children("1").children("2").get("name").should.equal "2"
+        @root.children("1").children("1").children("3").get("name").should.equal "3"
 

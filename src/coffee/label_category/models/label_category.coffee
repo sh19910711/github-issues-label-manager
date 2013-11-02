@@ -48,8 +48,7 @@ define(
             "destroy"
             =>
               if _(children.get("childrens")).keys().length > 0
-                delete children.get("label")
-                children.set "label", undefined
+                children.get("label").destroy() if children.get("label")
               else
                 delete childrens[category_name]
                 unless _(childrens).keys().length || @get("label")
@@ -60,7 +59,7 @@ define(
 
         # is leaf
         unless /\//.test label_name
-          childrens[category_name].set "label", label
+          childrens[category_name].set_label label
           # label.set "label_category", childrens[category_name]
           label.on(
             "change"

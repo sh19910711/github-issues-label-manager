@@ -79,9 +79,11 @@ describe "T005: LabelCategory::Views::LabelCategoryView", ->
         )
         @label1 = new @Label.Models.Label(
           name: "1/2"
+          color: "CCCCCC"
         )
         @label2 = new @Label.Models.Label(
           name: "1/2/3/4"
+          color: "CCCCCC"
         )
         @root.parse_labels_recursive_func @label1.get("name"), @label1
         @root.parse_labels_recursive_func @label2.get("name"), @label2

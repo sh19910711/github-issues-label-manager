@@ -32,6 +32,11 @@ define(
           deps: [
             "jquery"
           ]
+        "com/jquery/jquery.ui":
+          exports: "undefined"
+          deps: [
+            "jquery"
+          ]
         "com/bootstrap/bootstrap":
           exports: "undefined"
           deps: [

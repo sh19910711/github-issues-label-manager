@@ -68,7 +68,7 @@ define(
               if target.get("name") != target.previous("name")
                 prev_name = target.previous("name")
                 removed_label = root.query(prev_name)
-                removed_label.destroy()
+                removed_label.destroy() if removed_label
                 root.parse_labels_recursive_func target.get("name"), target
           )
           label.on(
@@ -90,6 +90,16 @@ define(
           @children(category_name)
         else
           @children(category_name).query(next_label_name)
+
+      get_by_cid: (cid)->
+        if @cid == cid
+          return @
+        res = false
+        childrens = @get "childrens"
+        _(childrens).each (child)->
+          res ||= child.get_by_cid cid
+          return false if res
+        return res
 
       set_label: (label)->
         @set "label", label

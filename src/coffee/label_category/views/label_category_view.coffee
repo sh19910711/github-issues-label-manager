@@ -23,7 +23,6 @@ define(
           "parsed"
           =>
             @build_dom()
-            @$el.children(".category").remove()
         )
         @model.on(
           "destroy"
@@ -44,7 +43,43 @@ define(
           childrens_element = @$el.children(".childrens")
           if ! @$el.children(".childrens").length
             childrens_element = $("<div class='childrens'></div>")
+            # set sortable
+            childrens_element.sortable
+              connectWith: ".childrens"
+              cursor: "move"
+              opacity: 1
+              update: (e, ui)=>
+                moved_view = $(ui.item[0])
+                category_cid = moved_view.attr "data-label-category-cid"
+                moved_model = @model.root().get_by_cid category_cid
+                console.log "update"
+                if moved_model
+                  # has label
+                  if moved_model.get "label"
+                    category_names = []
+                    cur = moved_view
+                    while cur.parents(".label-category-view").size()
+                      category_names.push cur.children().first().children(".name").text()
+                      cur = cur.parents(".label-category-view").first()
+                    new_label_name = category_names.reverse().join("/")
+                    old_label_name = moved_model.get("label").get("name")
+                    console.log "new = #{new_label_name} / old = #{old_label_name}"
+                    label_model = moved_model.get("label")
+                    label_model.save
+                      name: new_label_name
+
+              helper: (a, b)->
+                res = $(b).clone()
+                $(res).css
+                  "position": "absolute"
+                  "right": "36px"
+                  "top": "100px"
+                res
+              axis: "y"
+              placeholder: "ui-sortable-dummy"
+            childrens_element.disableSelection()
             @$el.append childrens_element
+
           childrens_element.empty()
           _(childrens).each (child_model)=>
             child_label = child_model.get("label")
@@ -86,7 +121,7 @@ define(
               "<div class='clearfix'></div>" +
               "</div>"
             )
-          @
+        @
 
       render_controllers: ->
         "<button class='btn btn-xs btn-warning disabled'>edit</button> " +

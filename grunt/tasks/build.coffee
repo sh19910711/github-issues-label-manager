@@ -89,6 +89,7 @@ module.exports = (grunt)->
             "underscore": "empty:"
             "bootstrap": "empty:"
             "com/jquery/jquery.pjax":             "empty:"
+            "com/jquery/jquery.ui":               "empty:"
             "com/bootstrap/bootstrap":            "empty:"
             "com/backbone/backbone-fetch-cache":  "empty:"
             "com/backbone/backbone-localstorage": "empty:"
@@ -128,13 +129,11 @@ module.exports = (grunt)->
   grunt.registerTask(
     "build"
     [
-      "clean:build"
       "compass:build"
       "bower:build"
       "coffee:build"
       "requirejs:build"
       "copy:build"
-      "clean:after-build"
       "copy:after-build"
       "uglify:build"
     ]

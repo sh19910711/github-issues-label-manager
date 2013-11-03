@@ -20,7 +20,8 @@
     "underscore": "~1.5.2",
     "backbone-fetch-cache": "~1.1.2",
     "sprintf": "*",
-    "backbone.localStorage": "~1.1.7"
+    "backbone.localStorage": "~1.1.7",
+    "jquery-ui": "~1.10.3"
   },
   "exportsOverride": {
     "bootstrap": {
@@ -36,6 +37,9 @@
     },
     "jquery-pjax": {
       "js": "jquery.pjax.js"
+    },
+    "jquery-ui": {
+      "js": "ui/jquery-ui.js"
     },
     "requirejs": {
       "js": "require.js"

@@ -19,6 +19,7 @@ module.exports = (grunt)->
           reporter: "spec"
           colors: false
           require: mocha_requires
+          clearRequireCache: true
         src: [
           "./spec/src/coffee/**/*_spec.coffee"
         ]
